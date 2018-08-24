@@ -1,0 +1,68 @@
+<div class="p-3 h-100 w-100 user-list mt-5">
+  <h2 class="h1 font-weight-bold" translate>Users list</h2>
+  <div>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th translate>Username</th>
+      <th translate>E-mail</th>
+      <th translate>Role</th>
+      <th translate>Blocked</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.username}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.role | translate}}</td>
+      <td>
+        <input type="checkbox" [checked]="user.blocked" (change)="changeBlockUserStatus(user.id, user.blocked)" class="big-checkbox pointer">
+      </td>
+      <td>
+        <div class="btn-group" dropdown>
+          <button type="button" class="btn waves-light action-btn" mdbWavesEffect translate>Action</button>
+          <button type="button" dropdownToggle class="btn dropdown-toggle dropdown-toggle-split px-3 waves-light action-btn" mdbWavesEffect></button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" routerLink="/profile/{{user.username}}" translate>Edit</a>
+            <li class="dropdown-submenu">
+              <a class="dropdown-item" tabindex="-1" translate>Set role</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="setUserRole('Reader', user.id)" translate>Reader</a></li>
+                <li><a class="dropdown-item" (click)="setUserRole('Writer', user.id)" translate>Writer</a></li>
+                <li><a class="dropdown-item" (click)="setUserRole('Admin', user.id)" translate>Admin</a></li>
+              </ul>
+            </li>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="confirmDeleteUser.show(); idDelete=user.id" translate>Delete</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div mdbModal #confirmDeleteUser="mdb-modal" class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="heading lead" translate>Delete confirm</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="confirmDeleteUser.hide()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <p translate>You are sure want to delete this account?</p>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a type="button" class="btn btn-primary waves-light" mdbWavesEffect (click)="deleteUser(idDelete); confirmDeleteUser.hide()" translate>Yes</a>
+        <a type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="confirmDeleteUser.hide()" mdbWavesEffect translate>No</a>
+      </div>
+    </div>
+  </div>
+</div>
+

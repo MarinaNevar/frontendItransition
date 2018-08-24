@@ -1,0 +1,71 @@
+<div *ngIf="profile.getUser() !== null" class="card-body">
+  <div class="row">
+    <div class="ml-5">
+      <div class="row">
+        <div>
+          <img class="img-fluid img-size" src={{profile.getUser()?.avatar}}>
+        </div>
+        <div class="near-img">
+          <div>
+            <dt class="profile-section__title" translate>Username</dt>
+            <h2 *ngIf="!showSection(0)" (click)="editSection(0)">{{profile.getUser()?.username}}</h2>
+            <input *ngIf="showSection(0)" [formControl]="Username" (mouseleave)="editUsername()" class="form-control" [attr.placeholder]="'Username' | translate" id="Username" type="text">
+            <h4 class="indigo-text">{{profile?.role | translate}}</h4>
+          </div>
+
+          <div *ngIf="profile.getUser()?.firstName || addNewInformation">
+            <dt class="profile-section__title" translate>First Name</dt>
+            <dd *ngIf="!showSection(1)" class="profile-section__about-text" (click)="editSection(1)">{{profile.getUser()?.firstName}}</dd>
+            <input *ngIf="showSection(1)" [formControl]="FirstName" (mouseleave)="saveInputStats(1)" class="form-control" id="FirstName" [attr.placeholder]="'First Name' | translate" type="text">
+          </div>
+          <div *ngIf="profile.getUser()?.lastName || addNewInformation">
+            <dt class="profile-section__title" translate>Last Name</dt>
+            <dd *ngIf="!showSection(2)" class="profile-section__about-text" (click)="editSection(2)">{{profile.getUser()?.lastName}}</dd>
+            <input *ngIf="showSection(2)" [formControl]="LastName" (mouseleave)="saveInputStats(2)" class="form-control" id="LastName" [attr.placeholder]="'Last Name' | translate" type="text">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="profile.getUser()?.country || addNewInformation">
+        <dt class="profile-section__title" translate>Country</dt>
+        <dd *ngIf="!showSection(3)" class="profile-section__about-text" (click)="editSection(3)">{{profile.getUser()?.country}}</dd>
+        <input *ngIf="showSection(3)" [formControl]="Country" (mouseleave)="saveInputStats(3)" class="form-control" id="Country" [attr.placeholder]="'Country' | translate" type="text">
+      </div>
+
+      <div *ngIf="profile.getUser()?.city || addNewInformation">
+        <dt class="profile-section__title" translate>City</dt>
+        <dd *ngIf="!showSection(4)" class="profile-section__about-text" (click)="editSection(4)">{{profile.getUser()?.city}}</dd>
+        <input *ngIf="showSection(4)" [formControl]="City" (mouseleave)="saveInputStats(4)" class="form-control" id="City" [attr.placeholder]="'City' | translate" type="text">
+      </div>
+
+
+      <div *ngIf="profile.getUser()?.bio || addNewInformation">
+        <dt class="profile-section__title" translate>Bio</dt>
+        <dd *ngIf="!showSection(5)" class="profile-section__about-text" (click)="editSection(5)">{{profile.getUser()?.bio}}</dd>
+        <input *ngIf="showSection(5)" [formControl]="Bio" (mouseleave)="saveInputStats(5)" class="form-control" id="Bio" [attr.placeholder]="'Bio' | translate" type="text">
+      </div>
+
+      <div *ngIf="addNewInformation" class="input-group image-preview my-3">
+        <input type="hidden" [attr.placeholder]="'Upload avatar' | translate" class="form-control image-preview-filename" disabled="disabled">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default image-preview-clear" style="display:none;" translate>
+              <span class="glyphicon glyphicon-remove"></span> Clear
+          </button>
+          <div class="btn btn-browse image-preview-input">
+              <span class="glyphicon glyphicon-folder-open "></span>
+              <span translate>Browse</span>
+              <input type="file" (change)="handleFileInput($event.target.files)" accept="image/png, image/jpeg, image/gif" name="input-file-preview"/>
+          </div>
+        </span>
+      </div>
+      <a *ngIf="!addNewInformation && isCanEdit()" class="text-primary" (click)="showNewInformation()" translate>
+        {{"+ Add information in profile" | translate}}
+      </a>
+      <a *ngIf="addNewInformation" class="text-primary" (click)="saveChanges()" translate>
+        {{"Save changes" | translate}}
+      </a>
+    </div>
+  </div>
+</div>
+
+

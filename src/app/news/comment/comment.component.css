@@ -1,0 +1,39 @@
+.section-heading{
+  margin: 5%;
+}
+.user-name, .comment-text{
+  font-weight: normal;
+}
+.photo{
+  padding-right: 5%;
+}
+.comment{
+  padding: 10% ;
+}
+.card-data{
+  padding: 0%;
+}
+.fa-thumbs-up{
+  color:royalblue;
+
+}
+:hover.fa-thumbs-up{
+  color: mediumblue;
+}
+
+.avatar{
+  width: 129px;
+}
+
+.fa-heart-red{
+  color: crimson;
+}
+
+.fa-heart-black{
+  color: black;
+}
+
+.img-size{
+  height: 120px;
+  width: 120px;
+}
