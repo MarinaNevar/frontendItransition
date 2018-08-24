@@ -1,8 +1,8 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
 import { first } from 'rxjs/operators';
-import {NewsService} from '../service';
+import {InstructionService} from '../service';
 import {ActivatedRoute} from '@angular/router';
-import {NewsInfoDto} from '../dto';
+import {InstructionInfoDto} from '../dto';
 import {Step, Category} from '../model';
 import {Subscription} from 'rxjs';
 import {SectionService} from '../service';
@@ -11,39 +11,39 @@ import {SectionService} from '../service';
   templateUrl: 'home.component.html',
   styleUrls: ['./home.component.css']})
 export class HomeComponent implements OnInit, OnDestroy {
-  news: NewsInfoDto[] = [];
-  viewNews: NewsInfoDto[] = [];
+  instructions: InstructionInfoDto[] = [];
+  viewInstructions: InstructionInfoDto[] = [];
   rangeValues: number[] = [0, 5];
-  searchedNews: NewsInfoDto[] = [];
-  // tags: Step[] = [];
+  searchedInstructions: InstructionInfoDto[] = [];
+  steps: Step[] = [];
   categories: Category[] = [];
-  // filterTags: Step[] = [];
+  filterSteps: Step[] = [];
   filterCategories: Category[] = [];
-  newsSubscription: Subscription;
+  instructionsSubscription: Subscription;
   routeSubscription: Subscription;
-  tagSubscription: Subscription;
+  stepSubscription: Subscription;
   categoriesSubscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
               private sectionService: SectionService,
-              private newsService: NewsService) {
+              private instructionService: InstructionService) {
   }
 
   ngOnInit() {
-    this.newsSubscription = this.newsService.getNews().pipe(first()).subscribe(news => {
-      this.news = this.newsService.sortByDate(news, -1);
-      this.viewNews = this.news;
-      // this.viewSearchNews();
-      // this.loadAllTags();
+    this.instructionsSubscription = this.instructionService.getInstructions().pipe(first()).subscribe(instructions => {
+      this.instructions = this.instructionService.sortByDate(instructions, -1);
+      this.viewInstructions = this.instructions;
+      this.viewSearchInstructions();
+      this.loadAllSteps();
       this.loadAllCategories();
     });
   }
 
-  // loadAllTags() {
-  //   this.newsSubscription = this.sectionService.getTags().pipe(first()).subscribe((tags: Step[]) => {
-  //     this.tags = tags;
-  //   });
-  // }
+   loadAllSteps() {
+     this.instructionsSubscription = this.sectionService.getSteps().pipe(first()).subscribe((steps: Step[]) => {
+       this.steps = steps;
+     });
+   }
 
   loadAllCategories() {
     this.categoriesSubscription = this.sectionService.getCategories().pipe(first()).subscribe((categories: Category[]) => {
@@ -51,103 +51,107 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterNewsRate() {
-    return this.news.filter((obj) => {
+  filterInstructionsRate() {
+    return this.instructions.filter((obj) => {
       return (obj.value_rating >= this.rangeValues[0]) && (obj.value_rating <= this.rangeValues[1]);
     });
   }
 
-  // viewSearchNews() {
-  //   this.routeSubscription = this.activatedRoute.queryParams
-  //     .subscribe(params => {
-  //       this.searchedNews = [];
-  //       const searchText = params['search'];
-  //       if ((searchText === undefined) || (searchText === '')) {
-  //         this.searchedNews = null;
-  //         this.filterNews();
-  //         return;
-  //       }
-  //       const re  = new RegExp(searchText, 'gi');
-  //       for (const postInfo of this.news) {
-  //         if ((postInfo.name.search(re) !== -1) || (postInfo.description.search(re) !== -1) ||
-  //           (postInfo.authorName.search(re) !== -1) || (postInfo.text.search(re) !== -1)) {
-  //           this.searchedNews.push(postInfo);
-  //         }
-  //       }
-  //       this.filterNews();
-  //
-  //     });
-  // }
+   viewSearchInstructions() {
+     this.routeSubscription = this.activatedRoute.queryParams
+       .subscribe(params => {
+         this.searchedInstructions = [];
+         const searchText = params['search'];
+         if ((searchText === undefined) || (searchText === '')) {
+           this.searchedInstructions = null;
+           this.filterInstructions();
+           return;
+         }
+         const re  = new RegExp(searchText, 'gi');
+         for (const instructionInfo of this.instructions) {
+           if ((instructionInfo.name.search(re) !== -1) || (instructionInfo.description.search(re) !== -1) ||
+             (instructionInfo.authorName.search(re) !== -1)) {
+             this.searchedInstructions.push(instructionInfo);
+           }
+           for (const step of instructionInfo.steps)
+             if ((step.name.search(re) !== -1) || (step.text.search(re) !== -1)) {
+               this.searchedInstructions.push(instructionInfo);
+             }
+         }
+         this.filterInstructions();
 
-  // filterNews() {
-  //   // const tagSuitable = this.filterNewsByTags();
-  //   const rateSuitable = this.filterNewsRate();
-  //   const categoriesSuitable = this.filterNewsByCategories();
-  //   let sectionSuitable = tagSuitable.filter(o => rateSuitable.some((item) => o === item));
-  //   this.viewNews = sectionSuitable.filter(o => categoriesSuitable.some((item) => o === item));
-  //   if (this.searchedNews !== null)
-  //     this.viewNews = this.viewNews.filter(o => this.searchedNews.some((item) => o === item));
-  // }
+       });
+   }
 
-  // filterNewsByTags(): NewsInfoDto[] {
-  //   const suitableArray = [];
-  //   for (const post of this.news) {
-  //     const isSuitable = this.filterTags.every((filter) => post.tags.some((tag) => filter.id === tag.id && filter.name === tag.name));
-  //     if (isSuitable) {
-  //       suitableArray.push(post);
-  //     }
-  //   }
-  //   return suitableArray;
-  // }
+   filterInstructions() {
+     const stepSuitable = this.filterInstructionsBySteps();
+     const rateSuitable = this.filterInstructionsRate();
+     const categoriesSuitable = this.filterInstructionsByCategories();
+     let sectionSuitable = stepSuitable.filter(o => rateSuitable.some((item) => o === item));
+     this.viewInstructions = sectionSuitable.filter(o => categoriesSuitable.some((item) => o === item));
+     if (this.searchedInstructions !== null)
+       this.viewInstructions = this.viewInstructions.filter(o => this.searchedInstructions.some((item) => o === item));
+   }
 
-  filterNewsByCategories(): NewsInfoDto[] {
+   filterInstructionsBySteps(): InstructionInfoDto[] {
+     const suitableArray = [];
+     for (const instruction of this.instructions) {
+       const isSuitable = this.filterSteps.every((filter) => instruction.steps.some((step) => filter.name === step.name));
+       if (isSuitable) {
+         suitableArray.push(instruction);
+       }
+     }
+     return suitableArray;
+   }
+
+  filterInstructionsByCategories(): InstructionInfoDto[] {
     const suitableArray = [];
-    for (const post of this.news) {
+    for (const instruction of this.instructions) {
       const isSuitable = this.filterCategories.every((filter) =>
-        post.categories.some(({id, name}) => filter.id === id && filter.name === name));
+        instruction.categories.some(({id, name}) => filter.id === id && filter.name === name));
       if (isSuitable) {
-        suitableArray.push(post);
+        suitableArray.push(instruction);
       }
     }
     return suitableArray;
   }
 
-  // pasteFilterCategory(category: Category) {
-  //   const index = this.filterCategories.indexOf(category, 0);
-  //   if (index === -1) {
-  //     this.filterCategories.push(category);
-  //   }
-  //   this.filterNews();
-  // }
+   pasteFilterCategory(category: Category) {
+     const index = this.filterCategories.indexOf(category, 0);
+     if (index === -1) {
+       this.filterCategories.push(category);
+     }
+     this.filterInstructions();
+   }
 
-  // pasteFilterTag(tag: Step) {
-  //   const index = this.filterTags.indexOf(tag, 0);
-  //   if (index === -1) {
-  //     this.filterTags.push(tag);
-  //   }
-  //   this.filterNews();
-  // }
+   pasteFilterStep(step: Step) {
+     const index = this.filterSteps.indexOf(step, 0);
+     if (index === -1) {
+       this.filterSteps.push(step);
+     }
+     this.filterInstructions();
+   }
 
-  // removeFilterTag(tag: Step) {
-  //   const index = this.filterTags.indexOf(tag, 0);
-  //   if (index > -1) {
-  //     this.filterTags.splice(index, 1);
-  //   }
-  //   this.filterNews();
-  // }
+   removeFilterStep(step: Step) {
+     const index = this.filterSteps.indexOf(step, 0);
+     if (index > -1) {
+       this.filterSteps.splice(index, 1);
+     }
+     this.filterInstructions();
+   }
 
-  // removeFilterCategory(category: Category) {
-  //   const index = this.filterCategories.indexOf(category, 0);
-  //   if (index > -1) {
-  //     this.filterCategories.splice(index, 1);
-  //   }
-  //   this.filterNews();
-  // }
+   removeFilterCategory(category: Category) {
+     const index = this.filterCategories.indexOf(category, 0);
+     if (index > -1) {
+       this.filterCategories.splice(index, 1);
+     }
+     this.filterInstructions();
+   }
 
   ngOnDestroy() {
-    this.newsSubscription && this.newsSubscription.unsubscribe();
+    this.instructionsSubscription && this.instructionsSubscription.unsubscribe();
     this.routeSubscription && this.routeSubscription.unsubscribe();
-    this.tagSubscription && this.tagSubscription.unsubscribe();
+    this.stepSubscription && this.stepSubscription.unsubscribe();
     this.categoriesSubscription && this.categoriesSubscription.unsubscribe();
   }
 }

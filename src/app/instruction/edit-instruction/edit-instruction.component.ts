@@ -1,32 +1,36 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
-import {ErrorService, InfoService, NewsService} from '../../service';
+import {ErrorService, InfoService, InstructionService} from '../../service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NewsInfoDto} from '../../dto';
+import {InstructionInfoDto} from '../../dto';
 import {SectionService} from '../../service';
 import {Category, Step} from '../../model/';
 
 @Component({
   selector: 'app-edit-news',
-  templateUrl: './edit-news.component.html',
-  styleUrls: ['./edit-news.component.css']
+  templateUrl: './edit-instruction.component.html',
+  styleUrls: ['./edit-instruction.component.css']
 })
-export class EditNewsComponent implements OnInit, OnDestroy {
-  news = new NewsInfoDto();
+export class EditInstructionComponent implements OnInit, OnDestroy {
+
+  newStep: Step;
+
+  numberSteps = 1;
+  instruction = new InstructionInfoDto();
   new = true;
   Title: FormControl;
   Description: FormControl;
-  private tags: Step[] = [];
+  private steps: Step[] = [];
   categories: {
     id: number;
     name: string;
     isActive: boolean;
   }[] = [];
   isFirstTimeOpen = true;
-  newsForm: FormGroup;
+  stepForm: FormGroup;
   viewMode = 'editTab';
   public uploader: FileUploader = new FileUploader({});
   public hasAnotherDropZoneOver = false;
@@ -34,42 +38,43 @@ export class EditNewsComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private formBuilder: FormBuilder,
-              private newsService: NewsService,
+              private instructionService: InstructionService,
               private sectionService: SectionService,
               private router: Router,
               private infoService: InfoService,
               private errorService: ErrorService) {
-    this.newsForm = this.formBuilder.group({
-      tag: ['']
+    this.stepForm = this.formBuilder.group({
+      stepName: [''],
+      stepText: ['']
     });
     this.sectionService.getCategories().pipe(first()).subscribe((categories: Category[]) => {
       for (const category of categories) {
         this.categories.push({id: category.id, name: category.name, isActive: false});
       }
     });
-    this.sectionService.getTags().pipe(first()).subscribe((tags: Step[]) => {
-      this.tags = tags;
+    this.sectionService.getSteps().pipe(first()).subscribe((steps: Step[]) => {
+      this.steps = steps;
     });
   }
 
   ngOnInit() {
     this.route.params.subscribe(
       (params: any) => {
-        this.news.id_user = params['authorId'];
+        this.instruction.id_user = params['authorId'];
         if (params.hasOwnProperty('id')) {
           const id = params['id'];
           this.new = false;
-          this.newsService.getPostById(id).pipe(first()).subscribe((snapshot: NewsInfoDto) => {
-              this.news = snapshot;
+          this.instructionService.getInstructionById(id).pipe(first()).subscribe((snapshot: InstructionInfoDto) => {
+              this.instruction = snapshot;
             },
             () => {
               this.router.navigate(['/exception404']);
             });
         }
       });
-    this.Title = new FormControl(this.news.name, [Validators.required,
+    this.Title = new FormControl(this.instruction.name, [Validators.required,
       Validators.minLength(4), Validators.maxLength(30)]);
-    this.Description = new FormControl(this.news.description, [Validators.required,
+    this.Description = new FormControl(this.instruction.description, [Validators.required,
       Validators.minLength(4), Validators.maxLength(100)]);
   }
 
@@ -81,44 +86,50 @@ export class EditNewsComponent implements OnInit, OnDestroy {
     for (const file of files) {
       const formdata: FormData = new FormData();
       formdata.append('file', file);
-      this.uploadSubscription = this.newsService.addImageToPost(formdata).pipe(first()).subscribe((data) => {
+      this.uploadSubscription = this.instructionService.addImageToInstruction(formdata).pipe(first()).subscribe((data) => {
         this.pasteImageInMarkdown(data);
       });
     }
   }
 
   pasteImageInMarkdown(url: string) {
-    if (this.news.text === undefined) {
-      this.news.text = '';
+    if (this.instruction === undefined) {
+      this.instruction.steps = null;
     }
-    this.news.text += ' <img class="img-fluid" src="' + url + '" style="max-width: 500px; max-heigth: 900px;">';
+    for(const step of this.instruction.steps){
+      step.text += ' <img class="img-fluid" src="' + url + '" style="max-width: 500px; max-heigth: 900px;">';
+    }
+
   }
 
-  // addTag() {
-  //   let tagName = this.newsForm.controls.tag.value;
-  //   tagName = tagName.trim();
-  //   const existedTag = this.news.tags.filter(obj => {
-  //     return obj['name'] === tagName;
-  //   });
-  //   if ((tagName.length !== 0) && (tagName.length < 24) && (existedTag.length === 0)) {
-  //     this.news.tags.push({id: null, name: tagName});
-  //   }
-  // }
+   addStep() {
+     this.newStep = new Step();
+     this.newStep.name = this.stepForm.controls.stepName.value;
+     this.newStep.text = this.stepForm.controls.stepText.value;
+     this.newStep.name = this.newStep.name.trim();
+     this.newStep.text = this.newStep.text.trim();
+     const existedStep = this.instruction.steps.filter(obj => {
+       return obj['name'] === this.newStep.name;
+     });
+     if ((this.newStep.name.length !== 0) && (this.newStep.name.length < 24) && (this.newStep.text.length !== 0) && (existedStep.length === 0)) {
+       this.instruction.steps.push(this.newStep);
+     }
+   }
 
-  // removeTag(tag: string) {
-  //   const removableTag = this.news.tags.filter(obj => {
-  //     return obj['name'] === tag;
-  //   });
-  //   if (removableTag.length !== 0) {
-  //     const index = this.news.tags.indexOf(removableTag[0], 0);
-  //     this.news.tags.splice(index, 1);
-  //   }
-  // }
+   removeStep(step: string) {
+     const removableTag = this.instruction.steps.filter(obj => {
+       return obj['name'] === step;
+     });
+     if (removableTag.length !== 0) {
+       const index = this.instruction.steps.indexOf(removableTag[0], 0);
+       this.instruction.steps.splice(index, 1);
+     }
+   }
 
   pasteChecked() {
     if (this.isFirstTimeOpen) {
       for (const category of this.categories) {
-        const activeCategory = this.news.categories.filter(obj => {
+        const activeCategory = this.instruction.categories.filter(obj => {
           return obj['name'] === category.name;
         });
         if (activeCategory.length !== 0 ) {
@@ -134,9 +145,9 @@ export class EditNewsComponent implements OnInit, OnDestroy {
       this.showError();
       return;
     }
-    this.news.value_rating = 0;
-    this.setNewsCategories();
-    this.newsService.addPost(this.news).pipe(first())
+    this.instruction.value_rating = 0;
+    this.setInstructionCategories();
+    this.instructionService.addInstruction(this.instruction).pipe(first())
       .subscribe(
         () => {
           this.router.navigate([`/`]);
@@ -148,19 +159,19 @@ export class EditNewsComponent implements OnInit, OnDestroy {
       this.showError();
       return;
     }
-    this.setNewsCategories();
-    this.newsService.editPost(this.news).pipe(first())
+    this.setInstructionCategories();
+    this.instructionService.editInstruction(this.instruction).pipe(first())
       .subscribe(
         () => {
-          this.router.navigate([`/news/${this.news.id}`]);
+          this.router.navigate([`/instruction/${this.instruction.id}`]);
         });
   }
 
-  setNewsCategories() {
-    this.news.categories = [];
+  setInstructionCategories() {
+    this.instruction.categories = [];
     for (const category of this.categories) {
       if (category.isActive) {
-        this.news.categories.push({id: category.id, name: category.name});
+        this.instruction.categories.push({id: category.id, name: category.name});
       }
     }
   }
@@ -187,7 +198,7 @@ export class EditNewsComponent implements OnInit, OnDestroy {
   }
 
   private isNullContent(): boolean {
-    return this.news.text === '' || this.news.text === null || this.news.text === undefined;
+    return this.instruction.steps === null || this.instruction.steps === undefined;
   }
 
   private showError() {

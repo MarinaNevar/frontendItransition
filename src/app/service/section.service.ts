@@ -12,7 +12,7 @@ export class SectionService {
     return this.http.get<Category[]>(`${environment.serverUrl}section/getAllCategories`);
   }
 
-  getTags() {
-    return this.http.get<Step[]>(`${environment.serverUrl}section/getAllTags`);
+  getSteps() {
+    return this.http.get<Step[]>(`${environment.serverUrl}section/getAllSteps`);
   }
 }

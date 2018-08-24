@@ -5,10 +5,7 @@ export class UserEditDto {
   username: string;
   firstName: string;
   lastName: string;
-  country: string;
   role: string;
-  city: string;
-  bio: string;
   avatar: string;
   theme: Theme;
   language: Language;

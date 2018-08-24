@@ -1,12 +1,12 @@
 export class RatingSetDto {
-  idPost: number;
+  idInstruction: number;
   username: string;
   rating: number;
 
-  constructor(idPost: number,
+  constructor(idInstruction: number,
               username: string,
               rating: number) {
-    this.idPost = idPost;
+    this.idInstruction = idInstruction;
     this.username = username;
     this.rating = rating;
   }

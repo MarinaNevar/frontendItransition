@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {first} from 'rxjs/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, NewsService, UserService} from '../../service';
+import {AuthenticationService, InstructionService, UserService} from '../../service';
 import {ActivatedRoute} from '@angular/router';
 import {CommentAddDto, CommentShowDto, LikeDto} from '../../dto';
 import * as Stomp from '@stomp/stompjs';
@@ -14,9 +14,9 @@ import {Like} from '../../model';
   styleUrls: ['./comment.component.css']
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  private serverUrl = 'http://localhost:8080/socket';
+  private serverUrl = 'http://localhost:8888/socket';
   private stompClient;
-  @Input() idPost: number;
+  @Input() idInstruction: number;
   @Input() addComment: boolean;
 
   commentForm: FormGroup;
@@ -26,7 +26,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   currentImage: string;
 
   constructor(private route: ActivatedRoute,
-              private newsService: NewsService,
+              private instructionService: InstructionService,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private authenticationService: AuthenticationService) { }
@@ -65,7 +65,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
     this.likeDto.id_user = this.authenticationService.getCurrentUserId();
     this.likeDto.id_comment = idComment;
-    this.newsService.addLike(this.likeDto).pipe(first())
+    this.instructionService.addLike(this.likeDto).pipe(first())
       .subscribe(
         () => {
           this.loadAllComments();
@@ -77,8 +77,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.commentAddDto.text = this.formControl.comment.value;
     this.commentAddDto.username = this.authenticationService.getCurrentUsername();
-    this.commentAddDto.id_news = this.idPost;
-    this.newsService.addComment(this.commentAddDto).pipe(first()).subscribe(
+    this.commentAddDto.id_instruction = this.idInstruction;
+    this.instructionService.addComment(this.commentAddDto).pipe(first()).subscribe(
       () => {
         this.formControl.comment.reset();
         this.sendMessage();
@@ -87,9 +87,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   loadAllComments() {
-    this.newsService.showComments(this.idPost).pipe(first()).subscribe((commentsShowDto) => {
+    this.instructionService.showComments(this.idInstruction).pipe(first()).subscribe((commentsShowDto) => {
       this.commentsShowDto = commentsShowDto;
-      this.commentsShowDto = this.newsService.sortComments(this.commentsShowDto);
+      this.commentsShowDto = this.instructionService.sortComments(this.commentsShowDto);
     });
   }
 

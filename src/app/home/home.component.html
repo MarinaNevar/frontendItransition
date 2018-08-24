@@ -1,6 +1,6 @@
 ﻿<section class="py-4 text-center text-lg-left">
-  <h2 *ngIf="searchedNews !== null" class="h1 font-weight-bold text-center mb-4 pt-4" translate>Search results</h2>
-  <h2 *ngIf="searchedNews === null" class="h1 font-weight-bold text-center mb-4 pt-4" translate>Recent news</h2>
+  <h2 *ngIf="searchedInstructions !== null" class="h1 font-weight-bold text-center mb-4 pt-4" translate>Search results</h2>
+  <h2 *ngIf="searchedInstructions === null" class="h1 font-weight-bold text-center mb-4 pt-4" translate>Recent instructions</h2>
   <div class="row">
     <div class="col-md-8">
       <div class="col-md-8 p-0">
@@ -11,24 +11,24 @@
             <i class="close fa fa-times my-auto mx-1" (click)="removeFilterCategory(category)"></i>
           </li>
         </ul>
-        <h3 *ngIf="filterTags.length !== 0" translate>Filter tags</h3>
+        <h3 *ngIf="filterSteps.length !== 0" translate>Filter steps</h3>
         <ul class="d-flex p-0 flex-wrap align-content-start">
-          <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let tag of filterTags">
-            <span class="text-dark pointer">{{tag.name}}</span>
-            <i class="close fa fa-times my-auto mx-1" (click)="removeFilterTag(tag)"></i>
+          <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of filterSteps">
+            <span class="text-dark pointer">{{step.name}}</span>
+            <i class="close fa fa-times my-auto mx-1" (click)="removeFilterStep(step)"></i>
           </li>
         </ul>
       </div>
       <div class="mb-5 ml-1">
         <h3 translate>{{"News rating range:" | translate}} {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
-        <p-slider [(ngModel)]="rangeValues" (onChange)="filterNews()" [style]="{'width':'200px'}" [range]="true" [min]="0" [max]="5"></p-slider>
+        <p-slider [(ngModel)]="rangeValues" (onChange)="filterInstructions()" [style]="{'width':'200px'}" [range]="true" [min]="0" [max]="5"></p-slider>
       </div>
-      <div *ngIf="viewNews.length !== 0">
-        <div  *ngFor="let post of viewNews">
+      <div *ngIf="viewInstructions.length !== 0">
+        <div  *ngFor="let instruction of viewInstructions">
           <div class="row">
             <div class="col-lg-5 col-xl-5 pb-3">
               <div class="view overlay rounded z-depth-2 waves-light" mdbWavesEffect>
-                <img src={{post.post.userImage}} alt="Sample image for first version of blog listing"
+                <img src={{instruction.userImage}} alt="Sample image for first version of blog listing"
                      class="img-fluid img-size w-100 h-100">
                 <a>
                   <div class="mask rgba-white-slight"></div>
@@ -37,23 +37,23 @@
             </div>
             <div class="col-lg-7 col-xl-7">
               <ul class="d-flex flex-wrap align-content-start tags-pos p-0">
-                <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let category of post.categories">
+                <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let category of instruction.categories">
                   <span class="badge badge-primary pointer">{{category.name}}</span>
                 </li>
               </ul>
               <h3 class="mb-4 font-weight-bold dark-grey-text">
-                <strong>{{post.post.name}}</strong>
+                <strong>{{instruction.name}}</strong>
               </h3>
-              <p><markdown>{{post.post.description}}</markdown></p>
+              <p><markdown>{{instruction.description}}</markdown></p>
               <p translate>by
                 <a>
-                  <strong>{{post.post.authorName}}</strong>
-                </a>, {{post.post.publishDate | date}}</p>
-              <app-rating [username]="post.post.authorName" [read]="true" [idPost]="post.post.id"></app-rating>
-              <a class="btn btn-md mb-3 waves-light" routerLink="/news/{{post.post.id}}" mdbWavesEffect translate>Read more</a>
+                  <strong>{{instruction.authorName}}</strong>
+                </a>, {{instruction.publishDate | date}}</p>
+              <app-rating [username]="instruction.authorName" [read]="true" [idPost]="instruction.id"></app-rating>
+              <a class="btn btn-md mb-3 waves-light" routerLink="/news/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
               <ul class="d-flex flex-wrap align-content-start tags-pos p-0">
-                <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let tag of post.tags">
-                  <span class="text-dark pointer">{{tag.name}}</span>
+                <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of instruction.steps">
+                  <span class="text-dark pointer">{{step.name}}</span>
                 </li>
               </ul>
             </div>
@@ -61,8 +61,8 @@
           <hr class="mb-5 mt-5 pb-3">
         </div>
       </div>
-      <div *ngIf="viewNews.length === 0">
-        <h2 class="text-center" translate>No matching news found</h2>
+      <div *ngIf="viewInstructions.length === 0">
+        <h2 class="text-center" translate>No matching instructions found</h2>
       </div>
     </div>
     <div class="col-md-4">
@@ -72,10 +72,10 @@
           <span class="badge badge-primary pointer" (click)="pasteFilterCategory(category)">{{category.name}}</span>
         </li>
       </ul>
-      <h3 *ngIf="tags.length !== 0" translate>Tags</h3>
+      <h3 *ngIf="steps.length !== 0" translate>Steps</h3>
       <ul class="d-flex p-0 flex-wrap align-content-start">
-        <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let tag of tags">
-          <span class="text-dark pointer" (click)="pasteFilterTag(tag)">{{tag.name}}</span>
+        <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of steps">
+          <span class="text-dark pointer" (click)="pasteFilterStep(step)">{{step.name}}</span>
         </li>
       </ul>
     </div>

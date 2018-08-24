@@ -5,8 +5,8 @@ import {RestorePasswordComponent} from './auth/restore-password/restore-password
 import {RememberComponent} from './auth/remember/remember.component';
 import {UsersListComponent} from './user/users-list/users-list.component';
 import {Exception404Component} from './exception/exception404/exception404.component';
-import {ViewNewsComponent} from './news/view-news/view-news.component';
-import {EditNewsComponent} from './news/edit-news/edit-news.component';
+import {ViewInstructionComponent} from './instruction/view-instruction/view-instruction.component';
+import {EditInstructionComponent} from './instruction/edit-instruction/edit-instruction.component';
 import {AdminGuard, WriterGuard} from './auth/guards';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
@@ -22,9 +22,9 @@ const appRoutes: Routes = [
     { path: 'restore/:code', component: RestorePasswordComponent},
     { path: 'users', component: UsersListComponent, canActivate: [AdminGuard]},
     { path: 'profile/:username', component: ProfileComponent },
-    { path: 'addPost', component: EditNewsComponent, canActivate: [WriterGuard]},
-    { path: 'editPost/:id', component: EditNewsComponent, canActivate: [WriterGuard]},
-    { path: 'news/:id', component: ViewNewsComponent},
+    { path: 'addPost', component: EditInstructionComponent, canActivate: [WriterGuard]},
+    { path: 'editPost/:id', component: EditInstructionComponent, canActivate: [WriterGuard]},
+    { path: 'news/:id', component: ViewInstructionComponent},
     { path: 'exception404', component: Exception404Component},
       // children: [
       //   {

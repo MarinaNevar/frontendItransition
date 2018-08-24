@@ -9,7 +9,7 @@ import { routing } from './app.routing';
 import {AdminGuard, ReaderGuard, WriterGuard} from './auth/guards';
 import { JwtInterceptor } from './auth/helpers';
 import {
-  NewsService,
+  InstructionService,
   UserService,
   ProfileService,
   SectionService,
@@ -32,10 +32,10 @@ import { AceEditorModule } from 'ng2-ace-editor';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {FileUploadModule} from 'ng2-file-upload';
-import { EditNewsComponent } from './news/edit-news/edit-news.component';
-import { ViewNewsComponent } from './news/view-news/view-news.component';
-import { CommentComponent } from './news/comment/comment.component';
-import { RatingComponent } from './news/rating/rating.component';
+import { EditInstructionComponent } from './instruction/edit-instruction/edit-instruction.component';
+import { ViewInstructionComponent } from './instruction/view-instruction/view-instruction.component';
+import { CommentComponent } from './instruction/comment/comment.component';
+import { RatingComponent } from './instruction/rating/rating.component';
 import {AccordionModule} from 'primeng/accordion';
 import {SliderModule} from 'primeng/slider';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -86,8 +86,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         ProfileNewsComponent,
         Exception404Component,
         ProfileInfoComponent,
-        EditNewsComponent,
-        ViewNewsComponent,
+        EditInstructionComponent,
+        ViewInstructionComponent,
         CommentComponent,
         RatingComponent
     ],
@@ -97,7 +97,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         WriterGuard,
         ReaderGuard,
         AuthenticationService,
-        NewsService,
+        InstructionService,
         ProfileService,
         SectionService,
         InfoService,

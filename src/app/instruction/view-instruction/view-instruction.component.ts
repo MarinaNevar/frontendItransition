@@ -1,36 +1,36 @@
 import {Component, Input, OnInit, ElementRef, ViewChild} from '@angular/core';
-import {News} from '../../model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, NewsService} from '../../service';
+import {AuthenticationService, InstructionService} from '../../service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
-import {NewsInfoDto} from '../../dto';
+import {InstructionInfoDto} from '../../dto';
 import * as jsPDF from 'jspdf';
 // import html2canvas from 'html2canvas';
 @Component({
-  selector: 'app-view-news',
-  templateUrl: './view-news.component.html',
-  styleUrls: ['./view-news.component.css']
+  selector: 'app-view-instruction',
+  templateUrl: './view-instruction.component.html',
+  styleUrls: ['./view-instruction.component.css']
 })
-export class ViewNewsComponent implements OnInit {
-  @Input() post: News;
+export class ViewInstructionComponent implements OnInit {
+  @Input() instruction: InstructionInfoDto;
   commentForm: FormGroup;
+  numberStep = 0;
   new = true;
   id: number;
   constructor(private route: ActivatedRoute,
-              private newsService: NewsService,
+              private instructionService: InstructionService,
               private formBuilder: FormBuilder,
               private router: Router,
               public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
-    if (this.post === undefined) {
+    if (this.instruction === undefined) {
       this.route.params.subscribe(
         (params: any) => {
           if (params.hasOwnProperty('id')) {
             this.id = params['id'];
             this.new = false;
-            this.newsService.getPostById(this.id).pipe(first()).subscribe((data: NewsInfoDto) => {
+            this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
               this.id = data.id;
             },
               () => {
@@ -45,8 +45,8 @@ export class ViewNewsComponent implements OnInit {
 
   }
 
-  deletePost(id: number) {
-    this.newsService.deletePost(id).pipe(first())
+  deleteInstruction(id: number) {
+    this.instructionService.deleteInstruction(id).pipe(first())
       .subscribe(
         () => {
           this.router.navigate([`/`]);
@@ -82,7 +82,7 @@ export class ViewNewsComponent implements OnInit {
 
   showEdit(): boolean {
     return (!this.new && this.authenticationService.isLogin() ?
-      ((this.authenticationService.getCurrentUsername() === this.post.authorName || this.authenticationService.isAdmin())) : false);
+      ((this.authenticationService.getCurrentUsername() === this.instruction.authorName || this.authenticationService.isAdmin())) : false);
   }
 
   showAddComment(): boolean {
@@ -100,4 +100,26 @@ export class ViewNewsComponent implements OnInit {
   canSetRating(): boolean {
     return !this.authenticationService.isLogin();
   }
+
+  leftrightStep(str: string) {
+    switch (str) {
+      case 'right': {
+        this.numberStep++;
+        break;
+      }
+      case 'left': {
+        this.numberStep--;
+        break;
+      }
+    }
+  }
+
+  correctLeftStep(): boolean {
+    return this.numberStep - 1 ? true : false;
+  }
+
+  correctRightStep(): boolean {
+    return this.numberStep + 1 ? true : false;
+  }
+
 }

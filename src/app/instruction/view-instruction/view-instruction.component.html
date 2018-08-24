@@ -1,0 +1,46 @@
+<div *ngIf="instruction" class="card mb-5 mt-5">
+  <div class="card-header bg-dark text-white">
+    <!--<div class="tool-box float-sm-right main-bg-bgcolor p-2 rounded">-->
+      <!--<a class="card-link pointer m-1 mr-2" (click)="downloadPdf()" translate>Download pdf</a>-->
+      <!--<a *ngIf="showEdit()" class="card-link pointer m-1" routerLink="/editPost/{{instruction.id}}"><i class="material-icons md-light">&#xE254;</i></a>-->
+      <!--<a *ngIf="showEdit()" class="card-link pointer m-1" (click)="confirmDeleteInstruction.show()"><i class="material-icons md-light">&#xE872;</i></a>-->
+    <!--</div>-->
+      <div class="float-sm-left">
+      <h2>{{instruction.name}}</h2>
+      <h5>{{instruction.publishDate | date}}</h5>
+        <app-rating *ngIf="showRating()"  [username]="getCurrentUsername()" [read]="canSetRating()" ></app-rating>
+        <div *ngIf="!new">
+          <a routerLink="/profile/{{instruction?.authorName}}"><h1>{{instruction?.authorName}}</h1></a>
+        </div>
+    </div>
+  </div>
+  <div class="card-body" id="contentToConvert">
+    <button [disabled] = "correctLeftStep()" mdbBtn type="button" color="primary" mdbWavesEffect><mdb-icon icon="magic" class="mr-1" (click)= "leftrightStep('left')"></mdb-icon>Left</button>
+    <button [disabled] = "correctRightStep()" mdbBtn type="button" color="default" mdbWavesEffect><mdb-icon icon="magic" class="ml-1" (click)= "leftrightStep('right')"></mdb-icon>Right</button>
+    <markdown [data]="instruction.steps[numberStep]"></markdown>
+    <label class="active" for="contentToConvert" translate>Шаг {{instruction.steps[numberStep].stepNumber}}: {{instruction.steps[numberStep].name}}</label>
+  </div>
+</div>
+<app-comment *ngIf="showComments()" [idInstruction]="id" [addComment]="showAddComment()"></app-comment>
+
+<div mdbModal #confirmDeletePost="mdb-modal" class="modal fade" id="centralModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-notify modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="heading lead" translate>Delete confirm</p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="confirmDeletePost.hide()">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <p translate>You are sure want to delete this Instruction?</p>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a type="button" class="btn btn-primary waves-light" mdbWavesEffect (click)="deleteInstruction(instruction.id); confirmDeletePost.hide()" translate>Yes</a>
+        <a type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="confirmDeletePost.hide()" mdbWavesEffect translate>No</a>
+      </div>
+    </div>
+  </div>
+</div>

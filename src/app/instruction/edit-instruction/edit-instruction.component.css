@@ -12,7 +12,7 @@
   margin-left: 10px;
 }
 
-.tags-pos{
+.steps-pos{
   padding-left: 10px;
 }
 
@@ -30,12 +30,12 @@
   overflow-y: auto;
 }
 
-.tags{
+.steps{
   padding: 10px;
   font-family: sans-serif;
   color: #A550BC;
 }
 
-.tags:hover{
+.steps:hover{
   background: #C2C2C2;
 }

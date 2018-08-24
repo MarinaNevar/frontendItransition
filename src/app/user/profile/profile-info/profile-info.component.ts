@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {InfoService, NewsService, ProfileService, UserService, AuthenticationService, RegularService, ErrorService} from '../../../service';
+import {InfoService, InstructionService, ProfileService, UserService, AuthenticationService, RegularService, ErrorService} from '../../../service';
 import {first} from 'rxjs/internal/operators';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
@@ -23,7 +23,7 @@ export class ProfileInfoComponent implements OnInit {
   addNewInformation = false;
 
   constructor(private router: Router,
-              private newsService: NewsService,
+              private newsService: InstructionService,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private activatedRoute: ActivatedRoute,

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserEditDto, NewsInfoDto} from '../../../dto';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {NewsService, ProfileService, UserService, AuthenticationService} from '../../../service';
+import {InstructionService, ProfileService, UserService, AuthenticationService} from '../../../service';
 import {first} from 'rxjs/internal/operators';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
@@ -24,7 +24,7 @@ export class ProfileNewsComponent implements OnInit {
   username: string;
 
   constructor(private router: Router,
-              private newsService: NewsService,
+              private newsService: InstructionService,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private activatedRoute: ActivatedRoute,

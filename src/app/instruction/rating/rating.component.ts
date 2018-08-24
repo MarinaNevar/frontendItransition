@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {NewsService} from '../../service';
+import {InstructionService} from '../../service';
 import {ActivatedRoute} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {RatingSetDto} from '../../dto';
@@ -17,7 +17,7 @@ export class RatingComponent implements OnInit {
   currentRating: number;
   changeRatingControl = 2;
   ratingControl = new FormControl();
-  constructor(private newsService: NewsService,
+  constructor(private newsService: InstructionService,
               private route: ActivatedRoute) {}
 
   ngOnInit() {
