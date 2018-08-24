@@ -55,6 +55,9 @@
               <span class="glyphicon glyphicon-folder-open "></span>
               <span translate>Browse</span>
               <input type="file" (change)="handleFileInput($event.target.files)" accept="image/png, image/jpeg, image/gif" name="input-file-preview"/>
+            <input name="file" type="file"
+                   class="file-upload" data-cloudinary-field="image_id"
+                   data-form-data="{ 'transformation': {'crop':'limit','tags':'samples','width':3000,'height':2000}}"/>
           </div>
         </span>
       </div>
