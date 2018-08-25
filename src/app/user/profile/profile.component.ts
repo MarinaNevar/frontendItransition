@@ -32,4 +32,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.routeSubscription && this.routeSubscription.unsubscribe();
   }
 
+
+
 }

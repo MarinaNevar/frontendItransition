@@ -43,7 +43,7 @@ export class ProfileNewsComponent implements OnInit {
     });
   }
 
-  public deletePost(id: number) {
+  public deleteInstruction(id: number) {
     this.instructionService.deleteInstruction(id).pipe(first()).subscribe(
       () => {
         this.loadAllInstructions();
@@ -90,7 +90,7 @@ export class ProfileNewsComponent implements OnInit {
     this.instructionsInSearch = this.instructionService.searchByFragment(this.instructions, this.searchForm.controls.search.value);
   }
 
-  isCanAddInstructions(): boolean {
-    return this.authenticationService.isCanAddNews(this.username) && (this.profile.role !== 'Reader');
+  isCanAddInstruction(): boolean {
+    return this.authenticationService.isCanAddInstruction(this.username) && (this.profile.role !== 'Reader');
   }
 }

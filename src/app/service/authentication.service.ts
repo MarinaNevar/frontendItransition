@@ -107,7 +107,7 @@ export class AuthenticationService {
       return this.isAdmin() || this.isCurrentUser(username);
     }
 
-    isCanAddNews(username: string): boolean {
+    isCanAddInstruction(username: string): boolean {
       return this.isAdmin() || (this.isCurrentUser(username) && this.isWriter());
     }
 

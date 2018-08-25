@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-sm-4">
         <h3 id="head_name" translate>{{profile.getUser()?.username}} {{"instructions" | translate}}
-          <a *ngIf="isCanAddInstructions()" class="pull-right" [routerLink]='["/addInstruction/", {authorId: profile.getUser()?.id}]'>+</a>
-        </h3>
+          <button *ngIf="isCanAddInstruction()" mdbBtn type="button" color="primary" mdbWavesEffect><mdb-icon icon="magic" class="mr-1" [routerLink]='["/addInstruction/", {authorId: profile.getUser()?.id}]'></mdb-icon>Add Instruction</button>
+         </h3>
         <hr id="head_hr" />
       </div>
-      <form *ngIf="isCanAddInstructions()" [formGroup]="searchForm" class="col-md-4 no-space ml-auto" (change)="search()" >
+      <form *ngIf="isCanAddInstruction()" [formGroup]="searchForm" class="col-md-4 no-space ml-auto" (change)="search()" >
         <div class="row md-form">
           <input class="form-control" id="search" formControlName="search" [attr.placeholder]="'Search...' | translate" type="text">
           <!--<i class="fa fa-search" aria-hidden="true"></i>-->
@@ -15,7 +15,7 @@
       </form>
     </div>
   </div>
-  <table *ngIf="isCanAddInstructions()" class="table text-center table-hover">
+  <table *ngIf="isCanAddInstruction()" class="table text-center table-hover">
     <thead>
     <tr>
       <th translate>
@@ -40,7 +40,7 @@
     <tbody>
     <tr *ngFor="let instruction of instructionsInSearch">
       <td>
-        <a routerLink="/news/{{instruction?.id}}">{{instruction?.name}}</a>
+        <a routerLink="/instructions/{{instruction?.id}}">{{instruction?.name}}</a>
       </td>
       <td>{{instruction?.description}}</td>
       <td>{{instruction?.publishDate | date}}</td>
@@ -48,9 +48,9 @@
         <div class="btn-group" dropdown>
           <button type="button" dropdownToggle class="btn action-btn dropdown-toggle dropdown-toggle-split px-3 waves-light" mdbWavesEffect></button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" routerLink="/editPost/{{instruction?.id}}" translate>Edit</a>
+            <a class="dropdown-item" routerLink="/editInstruction/{{instruction?.id}}" translate>Edit</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="deletePost(instruction?.id)" translate>Delete</a>
+            <a class="dropdown-item" (click)="deleteInstruction(instruction?.id)" translate>Delete</a>
           </div>
         </div>
       </td>

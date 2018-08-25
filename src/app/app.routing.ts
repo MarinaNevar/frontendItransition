@@ -22,8 +22,8 @@ const appRoutes: Routes = [
     { path: 'restore/:code', component: RestorePasswordComponent},
     { path: 'users', component: UsersListComponent, canActivate: [AdminGuard]},
     { path: 'profile/:username', component: ProfileComponent },
-    { path: 'addPost', component: EditInstructionComponent, canActivate: [WriterGuard]},
-    { path: 'editPost/:id', component: EditInstructionComponent, canActivate: [WriterGuard]},
+    { path: 'addInstruction', component: EditInstructionComponent, canActivate: [WriterGuard]},
+    { path: 'editInstruction/:id', component: EditInstructionComponent, canActivate: [WriterGuard]},
     { path: 'news/:id', component: ViewInstructionComponent},
     { path: 'exception404', component: Exception404Component},
       // children: [
