@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserEditDto, NewsInfoDto} from '../../../dto';
+import {UserEditDto, InstructionInfoDto} from '../../../dto';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {InstructionService, ProfileService, UserService, AuthenticationService} from '../../../service';
 import {first} from 'rxjs/internal/operators';
@@ -13,9 +13,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class ProfileNewsComponent implements OnInit {
   profile = this.profileService;
   user: UserEditDto;
-  news: NewsInfoDto[] = [];
+  instructions: InstructionInfoDto[] = [];
   searchForm: FormGroup;
-  newsInSearch: NewsInfoDto[] = [];
+  instructionsInSearch: InstructionInfoDto[] = [];
   currentUser = JSON.parse(localStorage.getItem('currentUser'));
   sortByNameType = 1;
   sortByDateType = 1;
@@ -24,7 +24,7 @@ export class ProfileNewsComponent implements OnInit {
   username: string;
 
   constructor(private router: Router,
-              private newsService: InstructionService,
+              private instructionService: InstructionService,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private activatedRoute: ActivatedRoute,
@@ -34,8 +34,8 @@ export class ProfileNewsComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe((params: Params) => {
       this.username = params['username'];
-      this.newsService.getNewsByUsername(this.username).pipe(first()).subscribe((newsInfoDto: NewsInfoDto[]) => {
-        this.newsInSearch = this.news = this.newsService.sortByDate(newsInfoDto, -1);
+      this.instructionService.getInstructionsByUsername(this.username).pipe(first()).subscribe((newsInfoDto: InstructionInfoDto[]) => {
+        this.instructionsInSearch = this.instructions = this.instructionService.sortByDate(newsInfoDto, -1);
       });
     });
     this.searchForm = this.formBuilder.group({
@@ -44,29 +44,29 @@ export class ProfileNewsComponent implements OnInit {
   }
 
   public deletePost(id: number) {
-    this.newsService.deletePost(id).pipe(first()).subscribe(
+    this.instructionService.deleteInstruction(id).pipe(first()).subscribe(
       () => {
-        this.loadAllNews();
+        this.loadAllInstructions();
       });
   }
 
-  private loadAllNews() {
-    this.newsService.getNewsByIdUser(this.profile.getUser().id).pipe(first()).subscribe(news => {
-      this.news = this.newsInSearch = this.newsService.sortByDate(news, -1);
+  private loadAllInstructions() {
+    this.instructionService.getInstructionsByIdUser(this.profile.getUser().id).pipe(first()).subscribe(instructions => {
+      this.instructions = this.instructionsInSearch = this.instructionService.sortByDate(instructions, -1);
     });
   }
 
   sortByTitle() {
     this.clickSortByName = true;
     this.clickSortByDate = false;
-    this.newsInSearch = this.newsService.sortByName(this.newsInSearch, this.sortByNameType);
+    this.instructionsInSearch = this.instructionService.sortByName(this.instructionsInSearch, this.sortByNameType);
     this.sortByNameType *= -1;
   }
 
   sortByDate() {
     this.clickSortByName = false;
     this.clickSortByDate = true;
-    this.newsInSearch = this.newsService.sortByDate(this.newsInSearch, this.sortByDateType);
+    this.instructionsInSearch = this.instructionService.sortByDate(this.instructionsInSearch, this.sortByDateType);
     this.sortByDateType *= -1;
   }
 
@@ -87,10 +87,10 @@ export class ProfileNewsComponent implements OnInit {
   }
 
   search() {
-    this.newsInSearch = this.newsService.searchByFragment(this.news, this.searchForm.controls.search.value);
+    this.instructionsInSearch = this.instructionService.searchByFragment(this.instructions, this.searchForm.controls.search.value);
   }
 
-  isCanAddNews(): boolean {
+  isCanAddInstructions(): boolean {
     return this.authenticationService.isCanAddNews(this.username) && (this.profile.role !== 'Reader');
   }
 }

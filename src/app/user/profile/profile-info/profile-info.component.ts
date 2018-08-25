@@ -23,7 +23,7 @@ export class ProfileInfoComponent implements OnInit {
   addNewInformation = false;
 
   constructor(private router: Router,
-              private newsService: InstructionService,
+              private instructionService: InstructionService,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private activatedRoute: ActivatedRoute,
@@ -42,9 +42,6 @@ export class ProfileInfoComponent implements OnInit {
       [ Validators.required, Validators.pattern(this.usernamePattern())]);
     this.FirstName = new FormControl(`${this.profile.getUser().firstName}`, Validators.pattern(this.firstNamePatten()));
     this.LastName = new FormControl(`${this.profile.getUser().lastName}`, Validators.pattern(this.lastNamePattern()));
-    this.Country = new FormControl(`${this.profile.getUser().country}`, Validators.pattern(this.countryPattern()));
-    this.City = new FormControl(`${this.profile.getUser().city}`, Validators.pattern(this.cityPattern()));
-    this.Bio = new FormControl(`${this.profile.getUser().bio}`, Validators.maxLength(200));
   }
 
   editSection(idCheck: number) {
@@ -97,36 +94,6 @@ export class ProfileInfoComponent implements OnInit {
             }
             break;
           }
-          case '3': {
-            if (this.Country.invalid) {
-              this.Country.reset(this.profile.getUser().country);
-              this.infoService.alertInformation(this.errorService.ERROR, this.errorService.INVALID_COUNTRY);
-            } else {
-              this.profile.getUser().country = this.Country.value;
-              this.infoService.alertInformation(this.errorService.SUCCESS, this.errorService.SUCCESS_CHANGE_COUNTRY);
-            }
-            break;
-          }
-          case '4': {
-            if (this.City.invalid) {
-              this.City.reset(this.profile.getUser().city);
-              this.infoService.alertInformation(this.errorService.ERROR, this.errorService.INVALID_CITY);
-            } else {
-              this.profile.getUser().city = this.City.value;
-              this.infoService.alertInformation(this.errorService.SUCCESS, this.errorService.SUCCESS_CHANGE_CITY);
-            }
-            break;
-          }
-          case '5': {
-            if (this.Bio.invalid) {
-              this.Bio.reset(this.profile.getUser().bio);
-              this.infoService.alertInformation(this.errorService.ERROR, this.errorService.INVALID_BIO);
-            } else {
-              this.profile.getUser().bio = this.Bio.value;
-              this.infoService.alertInformation(this.errorService.SUCCESS, this.errorService.SUCCESS_CHANGE_BIO);
-            }
-            break;
-          }
         }
       }
       if (!this.addNewInformation) {
@@ -156,7 +123,6 @@ export class ProfileInfoComponent implements OnInit {
     });
   }
 
-
   showNewInformation() {
     this.addNewInformation = true;
   }
@@ -184,17 +150,5 @@ export class ProfileInfoComponent implements OnInit {
 
   lastNamePattern(): string {
     return this.regularService.lastNamePattern;
-  }
-
-  countryPattern(): string {
-    return this.regularService.countryPattern;
-  }
-
-  cityPattern(): string {
-    return this.regularService.cityPattern;
-  }
-
-  bioPattern(): string {
-    return this.regularService.bioPattern;
   }
 }
