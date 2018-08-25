@@ -57,11 +57,11 @@ export class AuthenticationService {
     }
 
     isAdmin(): boolean {
-      return this.isLogin() ? JSON.parse(localStorage.getItem('currentUser')).userRole === 'ADMIN' : false;
+      return this.isLogin() ? JSON.parse(localStorage.getItem('currentUser')).userRole === 'ROLE_ADMIN' : false;
     }
 
     isWriter(): boolean {
-      return this.isLogin() ? JSON.parse(localStorage.getItem('currentUser')).userRole === 'WRITER' : false;
+      return this.isLogin() ? JSON.parse(localStorage.getItem('currentUser')).userRole === 'ROLE_WRITER' : false;
     }
 
     getCurrentUsername(): string {
