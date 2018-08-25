@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ProfileService, UserService} from '../../service';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params} from '@angular/router';
-import {UserEditDto, NewsInfoDto} from '../../dto';
+import {UserEditDto, InstructionInfoDto} from '../../dto';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +12,7 @@ import {UserEditDto, NewsInfoDto} from '../../dto';
 export class ProfileComponent implements OnInit, OnDestroy {
   profile = this.profileService;
   user = new  UserEditDto();
-  news: NewsInfoDto[] = [];
+  instructions: InstructionInfoDto[] = [];
   viewMode = 'newsTab';
   username: string;
 

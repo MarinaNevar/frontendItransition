@@ -13,27 +13,27 @@ import {RatingSetDto} from '../../dto';
 export class RatingComponent implements OnInit {
   @Input() username: string;
   @Input() read: boolean;
-  @Input() idPost: number;
+  @Input() idInstruction: number;
   currentRating: number;
   changeRatingControl = 2;
   ratingControl = new FormControl();
-  constructor(private newsService: InstructionService,
+  constructor(private instructionService: InstructionService,
               private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe(
       (params: any) => {
         if (params.hasOwnProperty('id')) {
-          this.idPost = params['id'];
-          this.newsService.getPostRating(this.idPost).pipe(first())
+          this.idInstruction = params['id'];
+          this.instructionService.getInstructionRating(this.idInstruction).pipe(first())
             .subscribe(
               (data) => {
                 this.currentRating = data;
               });
         }
       });
-    if (this.idPost !== null) {
-      this.newsService.getPostRating(this.idPost).pipe(first())
+    if (this.idInstruction !== null) {
+      this.instructionService.getInstructionRating(this.idInstruction).pipe(first())
         .subscribe(
           data => {
             this.currentRating = data;
@@ -43,7 +43,7 @@ export class RatingComponent implements OnInit {
 
   setRating() {
     if (this.changeRatingControl === 0) {
-      this.newsService.setRatingPost(new RatingSetDto(this.idPost, this.username, this.ratingControl.value)).pipe(first())
+      this.instructionService.setRatingPost(new RatingSetDto(this.idInstruction, this.username, this.ratingControl.value)).pipe(first())
         .subscribe(
           (currentRating) => {
             this.currentRating = currentRating;
