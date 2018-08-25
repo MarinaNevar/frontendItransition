@@ -49,7 +49,7 @@
                 <a>
                   <strong>{{instruction.authorName}}</strong>
                 </a>, {{instruction.publishDate | date}}</p>
-              <app-rating [username]="instruction.authorName" [read]="true" [idPost]="instruction.id"></app-rating>
+              <app-rating [username]="instruction.authorName" [read]="true" [idInstruction]="" ]="instruction.id"></app-rating>
               <a class="btn btn-md mb-3 waves-light" routerLink="/news/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
               <ul class="d-flex flex-wrap align-content-start tags-pos p-0">
                 <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of instruction.steps">
