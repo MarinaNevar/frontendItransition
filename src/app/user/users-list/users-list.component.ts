@@ -10,7 +10,7 @@ import {first} from 'rxjs/internal/operators';
 })
 export class UsersListComponent implements OnInit {
   users: User[] = [];
-  idDelete: number;
+  idDelete: boolean;
   constructor(private userService: UserService) {}
 
   ngOnInit() {

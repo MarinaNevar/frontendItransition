@@ -9,10 +9,10 @@ export class SectionService {
   constructor(private http: HttpClient) {}
 
   getCategories() {
-    return this.http.get<Category[]>(`${environment.serverUrl}section/getAllCategories`);
+    return this.http.get<Category[]>(`${environment.serverUrl}instructions/getAllCategories`);
   }
 
   getSteps() {
-    return this.http.get<Step[]>(`${environment.serverUrl}section/getAllSteps`);
+    return this.http.get<Step[]>(`${environment.serverUrl}instructions/getAllSteps`);
   }
 }
