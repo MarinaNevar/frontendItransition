@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="mb-5 ml-1">
-        <h3 translate>{{"News rating range:" | translate}} {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
+        <h3 translate>{{"Instructions rating range:" | translate}} {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
         <p-slider [(ngModel)]="rangeValues" (onChange)="filterInstructions()" [style]="{'width':'200px'}" [range]="true" [min]="0" [max]="5"></p-slider>
       </div>
       <div *ngIf="viewInstructions.length !== 0">
@@ -49,7 +49,7 @@
                 <a>
                   <strong>{{instruction.authorName}}</strong>
                 </a>, {{instruction.publishDate | date}}</p>
-              <app-rating [username]="instruction.authorName" [read]="true" [idPost]="instruction.id"></app-rating>
+              <app-rating [username]="instruction.authorName" [read]="true" [idInstruction]="instruction.id"></app-rating>
               <a class="btn btn-md mb-3 waves-light" routerLink="/news/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
               <ul class="d-flex flex-wrap align-content-start tags-pos p-0">
                 <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of instruction.steps">
