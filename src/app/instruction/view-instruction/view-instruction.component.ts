@@ -4,7 +4,6 @@ import {AuthenticationService, InstructionService} from '../../service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {InstructionInfoDto} from '../../dto';
-import {Step} from '../../model/';
 import * as jsPDF from 'jspdf';
 // import html2canvas from 'html2canvas';
 @Component({
@@ -14,7 +13,6 @@ import * as jsPDF from 'jspdf';
 })
 export class ViewInstructionComponent implements OnInit {
   @Input() instruction: InstructionInfoDto;
-  step: Step;
   commentForm: FormGroup;
   numberStep = 0;
   new = true;
@@ -26,57 +24,24 @@ export class ViewInstructionComponent implements OnInit {
               public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
-    //if (this.instruction === undefined) {
-    //  this.route.params.subscribe(
-    //    (params: any) => {
-    //      if (params.hasOwnProperty('id')) {
-    //        this.id = params['id'];
-    //        this.new = false;
-    //        this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
-    //          this.id = data.id;
-    //        },
-    //          () => {
-    //          this.router.navigate(['/exception404']);
-    //          });
-    //      }
-    //    });
-    //}
+    if (this.instruction === undefined) {
+      this.route.params.subscribe(
+        (params: any) => {
+          if (params.hasOwnProperty('id')) {
+            this.id = params['id'];
+            this.new = false;
+            this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
+              this.id = data.id;
+            },
+              () => {
+              this.router.navigate(['/exception404']);
+              });
+          }
+        });
+    }
     this.commentForm = this.formBuilder.group({
       comment: ['', Validators.required]
     });
-
-    this.new = false;
-    this.id = 1234;
-
-    this.instruction = new InstructionInfoDto();
-
-    this.instruction.id = 1234;
-    this.instruction.id_user = 1234;
-    this.instruction.userImage = 'sjdfvnl';
-    this.instruction.authorName = 'MARINANEVAR';
-    this.instruction.categories = [
-      { "id": 0, "name": "Available" },
-      { "id": 1, "name": "Ready" },
-      { "id": 2, "name": "Started" }
-    ];
-    this.instruction.description = 'sdfhsdfhkdfj';
-    this.instruction.name = 'BIG INSTRUCTION MY';
-    this.instruction.value_rating = 3,6;
-    this.instruction.publishDate = '12.12.2018';
-
-    this.addSteps('STEPNAME', 1, 'sdddddddsddsddsddsdssdsdsdds');
-    this.addSteps('STEPNAME111111111111', 2, 'QQQQQQQQQQQQQQQQQQQQQQQQ');
-
-    console.log(this.instruction.steps.length);
-
-  }
-
-  addSteps(name:string, stepN: number, text: string) {
-    this.step = new Step();
-    this.step.name = name;
-    this.step.stepNumber = stepN;
-    this.step.text = text;
-    this.instruction.steps.push(this.step);
   }
 
   deleteInstruction(id: number) {
