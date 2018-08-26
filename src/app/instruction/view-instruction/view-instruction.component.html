@@ -1,24 +1,34 @@
 <div *ngIf="instruction" class="card mb-5 mt-5">
-  <div class="card-header bg-dark text-white">
+  <div class="card-header elegant-color text-white">
     <!--<div class="tool-box float-sm-right main-bg-bgcolor p-2 rounded">-->
-      <!--<a class="card-link pointer m-1 mr-2" (click)="downloadPdf()" translate>Download pdf</a>-->
-      <!--<a *ngIf="showEdit()" class="card-link pointer m-1" routerLink="/editPost/{{instruction.id}}"><i class="material-icons md-light">&#xE254;</i></a>-->
-      <!--<a *ngIf="showEdit()" class="card-link pointer m-1" (click)="confirmDeleteInstruction.show()"><i class="material-icons md-light">&#xE872;</i></a>-->
+    <!--<a class="card-link pointer m-1 mr-2" (click)="downloadPdf()" translate>Download pdf</a>-->
+    <!--<a *ngIf="showEdit()" class="card-link pointer m-1" routerLink="/editPost/{{instruction.id}}"><i class="material-icons md-light">&#xE254;</i></a>-->
+    <!--<a *ngIf="showEdit()" class="card-link pointer m-1" (click)="confirmDeleteInstruction.show()"><i class="material-icons md-light">&#xE872;</i></a>-->
     <!--</div>-->
-      <div class="float-sm-left">
+    <div class="float-sm-left">
       <h2>{{instruction.name}}</h2>
       <h5>{{instruction.publishDate | date}}</h5>
-        <app-rating *ngIf="showRating()"  [username]="getCurrentUsername()" [read]="canSetRating()" ></app-rating>
-        <div *ngIf="!new">
-          <a routerLink="/profile/{{instruction?.authorName}}"><h1>{{instruction?.authorName}}</h1></a>
-        </div>
+      <app-rating *ngIf="showRating()"  [username]="getCurrentUsername()" [read]="canSetRating()" ></app-rating>
+      <div *ngIf="!new">
+        <a routerLink="/profile/{{instruction?.authorName}}"><h10>{{instruction?.authorName}}</h10></a>
+      </div>
     </div>
   </div>
+  <br>
+  <ul>
+    <li *ngFor="let step of instruction.steps">
+      <div class="d-flex d-flex-1 flex-wrap">Шаг {{step.stepNumber}}: {{step.name}}</div>
+    </li>
+  </ul>
   <div class="card-body" id="contentToConvert">
-    <button [disabled] = "correctLeftStep()" mdbBtn type="button" color="primary" mdbWavesEffect><mdb-icon icon="magic" class="mr-1" (click)= "leftrightStep('left')"></mdb-icon>Left</button>
-    <button [disabled] = "correctRightStep()" mdbBtn type="button" color="default" mdbWavesEffect><mdb-icon icon="magic" class="ml-1" (click)= "leftrightStep('right')"></mdb-icon>Right</button>
-    <markdown [data]="instruction.steps[numberStep]"></markdown>
-    <label class="active" for="contentToConvert" translate>Шаг {{instruction.steps[numberStep].stepNumber}}: {{instruction.steps[numberStep].name}}</label>
+    <div class="card-body elegant-color white-text rounded-bottom">
+      <label class="active" for="contentToConvert" translate>Шаг {{instruction.steps[numberStep].stepNumber}}: {{instruction.steps[numberStep].name}}</label>
+      <div>
+        <button type="button" class="btn btn-outline-default btn-rounded waves-effect" [disabled] = "correctLeftStep()" (click)= "leftrightStep(-1)"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-outline-default btn-rounded waves-effect" [disabled] = "correctRightStep()" (click)= "leftrightStep(1)"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+      </div>
+      <markdown [data]="instruction.steps[numberStep].text"></markdown>
+    </div>
   </div>
 </div>
 <app-comment *ngIf="showComments()" [idInstruction]="id" [addComment]="showAddComment()"></app-comment>

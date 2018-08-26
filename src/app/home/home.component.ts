@@ -84,24 +84,11 @@ export class HomeComponent implements OnInit, OnDestroy {
    }
 
    filterInstructions() {
-     const stepSuitable = this.filterInstructionsBySteps();
      const rateSuitable = this.filterInstructionsRate();
      const categoriesSuitable = this.filterInstructionsByCategories();
-     let sectionSuitable = stepSuitable.filter(o => rateSuitable.some((item) => o === item));
-     this.viewInstructions = sectionSuitable.filter(o => categoriesSuitable.some((item) => o === item));
+     this.viewInstructions = rateSuitable.filter(o => categoriesSuitable.some((item) => o === item));
      if (this.searchedInstructions !== null)
        this.viewInstructions = this.viewInstructions.filter(o => this.searchedInstructions.some((item) => o === item));
-   }
-
-   filterInstructionsBySteps(): InstructionInfoDto[] {
-     const suitableArray = [];
-     for (const instruction of this.instructions) {
-       const isSuitable = this.filterSteps.every((filter) => instruction.steps.some((step) => filter.name === step.name));
-       if (isSuitable) {
-         suitableArray.push(instruction);
-       }
-     }
-     return suitableArray;
    }
 
   filterInstructionsByCategories(): InstructionInfoDto[] {
@@ -120,22 +107,6 @@ export class HomeComponent implements OnInit, OnDestroy {
      const index = this.filterCategories.indexOf(category, 0);
      if (index === -1) {
        this.filterCategories.push(category);
-     }
-     this.filterInstructions();
-   }
-
-   pasteFilterStep(step: Step) {
-     const index = this.filterSteps.indexOf(step, 0);
-     if (index === -1) {
-       this.filterSteps.push(step);
-     }
-     this.filterInstructions();
-   }
-
-   removeFilterStep(step: Step) {
-     const index = this.filterSteps.indexOf(step, 0);
-     if (index > -1) {
-       this.filterSteps.splice(index, 1);
      }
      this.filterInstructions();
    }

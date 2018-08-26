@@ -11,13 +11,6 @@
             <i class="close fa fa-times my-auto mx-1" (click)="removeFilterCategory(category)"></i>
           </li>
         </ul>
-        <h3 *ngIf="filterSteps.length !== 0" translate>Filter steps</h3>
-        <ul class="d-flex p-0 flex-wrap align-content-start">
-          <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of filterSteps">
-            <span class="text-dark pointer">{{step.name}}</span>
-            <i class="close fa fa-times my-auto mx-1" (click)="removeFilterStep(step)"></i>
-          </li>
-        </ul>
       </div>
       <div class="mb-5 ml-1">
         <h3 translate>{{"Instructions rating range:" | translate}} {{rangeValues[0] + ' - ' + rangeValues[1]}}</h3>
@@ -50,12 +43,7 @@
                   <strong>{{instruction.authorName}}</strong>
                 </a>, {{instruction.publishDate | date}}</p>
               <app-rating [username]="instruction.authorName" [read]="true" [idInstruction]="instruction.id"></app-rating>
-              <a class="btn btn-md mb-3 waves-light" routerLink="/news/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
-              <ul class="d-flex flex-wrap align-content-start tags-pos p-0">
-                <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of instruction.steps">
-                  <span class="text-dark pointer">{{step.name}}</span>
-                </li>
-              </ul>
+              <a class="btn btn-md mb-3 waves-light" routerLink="/instruction/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
             </div>
           </div>
           <hr class="mb-5 mt-5 pb-3">
@@ -70,12 +58,6 @@
       <ul class="d-flex flex-wrap align-content-start p-0">
         <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let category of categories">
           <span class="badge badge-primary pointer" (click)="pasteFilterCategory(category)">{{category.name}}</span>
-        </li>
-      </ul>
-      <h3 *ngIf="steps.length !== 0" translate>Steps</h3>
-      <ul class="d-flex p-0 flex-wrap align-content-start">
-        <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of steps">
-          <span class="text-dark pointer" (click)="pasteFilterStep(step)">{{step.name}}</span>
         </li>
       </ul>
     </div>

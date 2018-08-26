@@ -4,7 +4,6 @@ import {AuthenticationService, InstructionService} from '../../service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {InstructionInfoDto} from '../../dto';
-import {Step} from '../../model/';
 import * as jsPDF from 'jspdf';
 // import html2canvas from 'html2canvas';
 @Component({
@@ -14,7 +13,6 @@ import * as jsPDF from 'jspdf';
 })
 export class ViewInstructionComponent implements OnInit {
   @Input() instruction: InstructionInfoDto;
-  step: Step;
   commentForm: FormGroup;
   numberStep = 0;
   new = true;
@@ -26,49 +24,24 @@ export class ViewInstructionComponent implements OnInit {
               public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
-    //if (this.instruction === undefined) {
-    //  this.route.params.subscribe(
-    //    (params: any) => {
-    //      if (params.hasOwnProperty('id')) {
-    //        this.id = params['id'];
-    //        this.new = false;
-    //        this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
-    //          this.id = data.id;
-    //        },
-    //          () => {
-    //          this.router.navigate(['/exception404']);
-    //          });
-    //      }
-    //    });
-    //}
+    if (this.instruction === undefined) {
+      this.route.params.subscribe(
+        (params: any) => {
+          if (params.hasOwnProperty('id')) {
+            this.id = params['id'];
+            this.new = false;
+            this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
+              this.id = data.id;
+            },
+              () => {
+              this.router.navigate(['/exception404']);
+              });
+          }
+        });
+    }
     this.commentForm = this.formBuilder.group({
       comment: ['', Validators.required]
     });
-
-    this.step.name = 'STEPNAME';
-    this.step.stepNumber = 1;
-    this.step.text = 'sdddddddsddsddsddsdssdsdsdds';
-
-
-    this.instruction.authorName = 'MARINANEVAR';
-    this.instruction.categories = [
-      { "id": 0, "name": "Available" },
-      { "id": 1, "name": "Ready" },
-      { "id": 2, "name": "Started" }
-    ];
-    this.instruction.description = 'sdfhsdfhkdfj';
-    this.instruction.name = 'BIG INSTRUCTION MY';
-    this.instruction.value_rating = 3,6;
-    this.instruction.publishDate = '12.12.2018';
-    this.instruction.steps.push(this.step);
-
-    this.step.name = 'STEPNAME111111111111';
-    this.step.stepNumber = 2;
-    this.step.text = 'QQQQQQQQQQQQQQQQQQQQQQQQ';
-
-    this.instruction.steps.push(this.step);
-
-
   }
 
   deleteInstruction(id: number) {
@@ -127,25 +100,17 @@ export class ViewInstructionComponent implements OnInit {
     return !this.authenticationService.isLogin();
   }
 
-  leftrightStep(str: string) {
-    switch (str) {
-      case 'right': {
-        this.numberStep++;
-        break;
-      }
-      case 'left': {
-        this.numberStep--;
-        break;
-      }
-    }
+  leftrightStep(num: number) {
+    this.numberStep += num;
   }
 
   correctLeftStep(): boolean {
-    return this.numberStep - 1 ? true : false;
+
+    return this.numberStep - 1 < 0 ? true : false;
   }
 
   correctRightStep(): boolean {
-    return this.numberStep + 1 ? true : false;
+    return this.numberStep + 1 > this.instruction.steps.length - 1 ? true : false;
   }
 
 }
