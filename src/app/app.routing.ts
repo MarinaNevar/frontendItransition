@@ -24,7 +24,7 @@ const appRoutes: Routes = [
     { path: 'profile/:username', component: ProfileComponent },
     { path: 'addInstruction', component: EditInstructionComponent, canActivate: [WriterGuard]},
     { path: 'editInstruction/:id', component: EditInstructionComponent, canActivate: [WriterGuard]},
-    { path: 'news/:id', component: ViewInstructionComponent},
+    { path: 'instruction', component: ViewInstructionComponent},//:id
     { path: 'exception404', component: Exception404Component},
       // children: [
       //   {

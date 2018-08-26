@@ -8,6 +8,10 @@
   border-radius: 6px;
 }
 
+.d-flex-1 {
+  display: block !important;
+}
+
 .m-left{
   margin-left: 10px;
 }

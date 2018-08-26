@@ -17,18 +17,16 @@ import {Category, Step} from '../../model/';
 export class EditInstructionComponent implements OnInit, OnDestroy {
 
   newStep: Step;
-
   numberSteps = 1;
   instruction = new InstructionInfoDto();
   new = true;
   Title: FormControl;
   Description: FormControl;
-  private steps: Step[] = [];
   categories: {
     id: number;
     name: string;
-    isActive: boolean;
-  }[] = [];
+    isActive: boolean; }[] = [];
+
   isFirstTimeOpen = true;
   stepForm: FormGroup;
   viewMode = 'editTab';
@@ -53,7 +51,7 @@ export class EditInstructionComponent implements OnInit, OnDestroy {
       }
     });
     this.sectionService.getSteps().pipe(first()).subscribe((steps: Step[]) => {
-      this.steps = steps;
+      this.instruction.steps = steps;
     });
   }
 
@@ -106,24 +104,22 @@ export class EditInstructionComponent implements OnInit, OnDestroy {
      this.newStep = new Step();
      this.newStep.name = this.stepForm.controls.stepName.value;
      this.newStep.text = this.stepForm.controls.stepText.value;
-     this.newStep.name = this.newStep.name.trim();
-     this.newStep.text = this.newStep.text.trim();
-     const existedStep = this.instruction.steps.filter(obj => {
-       return obj['name'] === this.newStep.name;
-     });
-     if ((this.newStep.name.length !== 0) && (this.newStep.name.length < 24) && (this.newStep.text.length !== 0) && (existedStep.length === 0)) {
+     this.newStep.stepNumber = this.numberSteps;
+     if ((this.newStep.name.length !== 0) && (this.newStep.text.length !== 0)) {
        this.instruction.steps.push(this.newStep);
+       this.numberSteps++;
      }
+     this.stepForm.reset();
    }
 
-   removeStep(step: string) {
-     const removableTag = this.instruction.steps.filter(obj => {
-       return obj['name'] === step;
-     });
-     if (removableTag.length !== 0) {
-       const index = this.instruction.steps.indexOf(removableTag[0], 0);
-       this.instruction.steps.splice(index, 1);
-     }
+   removeStep(step: Step) {
+    if(this.instruction.steps.length > 1) {
+      for( let num = step.stepNumber; num < this.instruction.steps.length; num++) {
+        this.instruction.steps[num].stepNumber--;
+      }
+    }
+     this.numberSteps--;
+     this.instruction.steps.splice(step.stepNumber - 1, 1);
    }
 
   pasteChecked() {

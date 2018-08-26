@@ -2,13 +2,13 @@
 
   <div class="col-md-8">
     <div class="md-form">
-      <input [formControl]="Title" [(ngModel)]="instruction.name" class="form-control" id="instructionName" [attr.placeholder]="'Title' | translate" type="text">
+      <input [formControl]="Title" [(ngModel)]="instruction.name" class="form-control" id="instructionName" type="text">
       <label class="active" for="instructionName" translate>Title</label>
     </div>
   </div>
   <div class="col-md-8">
     <div class="md-form">
-      <input [formControl]="Description" [(ngModel)]="instruction.description" class="form-control" id="instructionDescription" [attr.placeholder]="'Description' | translate" type="text">
+      <input [formControl]="Description" [(ngModel)]="instruction.description" class="form-control" id="instructionDescription" type="text">
       <label class="active" for="instructionDescription" translate>Description</label>
     </div>
   </div>
@@ -20,13 +20,13 @@
       </button>
       <div class="dropdown-menu dropdown-primary">
         <a class="dropdown-item col-md-11 m-left" *ngFor="let category of categories" (click)="disableHideDropdown($event)" (click)="category.isActive = !category.isActive">
-            <input class="form-check-input mr-1 drop-checkbox position-static" [checked]="category.isActive" (onClick)="category.isActive = !category.isActive" type="checkbox">
+          <input class="form-check-input mr-1 drop-checkbox position-static" [checked]="category.isActive" (onClick)="category.isActive = !category.isActive" type="checkbox">
           {{category.name}}
         </a>
       </div>
     </div>
 
-    <form [formGroup]="stepForm" class="col-md-6" (change)="addStep()" >
+    <form [formGroup]="stepForm" class="col-md-6">
       <div class="md-form">
         <input class="form-control" id="nameSteps" required formControlName="stepName" type="text">
         <label class="active" for="nameSteps" translate>Name step</label>
@@ -41,39 +41,49 @@
     </form>
   </div>
 
-  <ul class="d-flex flex-wrap align-content-start tags-pos">
-    <li class="p-1 bg-light rounded d-flex m-1" *ngFor="let step of instruction.steps">
-      <span class="text-dark">{{step.name}}</span>
-      <ul class="nav nav-pills" id="editPill">
-        <li class="nav-item"><a class="nav-link" [class.tabActive]="viewMode == 'editTab'" (click)="viewMode ='editTab'" rel="editTab" translate>Edit</a></li>
-        <li class="nav-item"><a class="nav-link" [class.tabActive]="viewMode == 'previewTab'" rel="previewTab" (click)="viewMode ='previewTab'" translate>Preview</a></li>
-      </ul>
-      <i class="close fa fa-times my-auto mx-1" (click)="removeStep(step.name)"></i>
-      <div class="tab-content" [ngSwitch]="viewMode">
-        <div class="tab-pane fade show active" id="edit-markdown-edit" *ngSwitchCase="'editTab'">
-          <div class="card">
-            <div class="card-header bg-dark text-white">
-              <h5 class="card-title float-sm-left" translate>Content</h5>
-            </div>
-            <div class="card-body">
-              <div ace-editor ng2FileDrop (onFileDrop)="imageUpload($event)"
-                   [(text)]="step.text"
-                   [theme]="'eclipse'"
-                   (fileOver)="fileOverAnother($event)"
-                   [uploader]="uploader"
-                   style="min-height: 300px; width:100%; overflow: auto;" name="markdownEditor">
+  <ul class="d-flex d-flex-1 flex-wrap align-content-start tags-pos">
+    <li class="p-1 bg-light rounded d-flex" *ngFor="let step of instruction.steps">
+      <button type="button" mdbBtn color="primary" class="waves-light" (click)="form.show()" mdbWavesEffect>Шаг {{step.stepNumber}} : {{step.name}}</button>
+      <div mdbModal #form="mdb-modal" class="modal fade" id="modalContactFormNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog cascading-modal" role="document">
+          <!--Content-->
+          <div class="modal-content" style="width: 500px; height: 400px; position: center">
+            <form>
+              <ul class="nav nav-pills" id="editPill">
+                <li class="nav-item"><a class="nav-link" [class.tabActive]="viewMode == 'editTab'" (click)="viewMode ='editTab'" rel="editTab" translate>Edit</a></li>
+                <li class="nav-item"><a class="nav-link" [class.tabActive]="viewMode == 'previewTab'" rel="previewTab" (click)="viewMode ='previewTab'" translate>Preview</a></li>
+                <li class="nav-item"><a class="nav-link" (click)="removeStep(step)">Delete step</a></li>
+              </ul>
+              <div class="tab-content" [ngSwitch]="viewMode">
+                <div class="tab-pane fade show active" id="edit-markdown-edit" *ngSwitchCase="'editTab'">
+                  <div class="card">
+                    <div class="card-header bg-dark text-white">
+                      <h5 class="card-title float-sm-left" translate>Content</h5>
+                    </div>
+                    <div class="card-body" >
+                      <div ace-editor ng2FileDrop (onFileDrop)="imageUpload($event)"
+                           [(text)]="step.text"
+                           [theme]="'eclipse'"
+                           (fileOver)="fileOverAnother($event)"
+                           [uploader]="uploader"
+                           style="min-height: 300px; width:100%; overflow: auto;" name="markdownEditor">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngSwitchCase="'previewTab'">
+                  <div class="card-body">
+                    <markdown [data]="step.text"></markdown>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div *ngSwitchCase="'previewTab'">
-          <div class="card-body">
-            <markdown [data]="step.text"></markdown>
+            </form>
           </div>
         </div>
       </div>
     </li>
   </ul>
+
 
   <div class="card mt-5">
     <div class="card-header">
