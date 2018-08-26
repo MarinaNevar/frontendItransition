@@ -52,9 +52,9 @@ export class ProfileNewsComponent implements OnInit {
 
   private loadAllInstructions() {
     this.instructionService.getInstructionsByIdUser(this.profile.getUser().id).pipe(first()).subscribe(instructions => {
-      this.instructions = this.instructionsInSearch = this.instructionService.sortByDate(instructions, -1);
-    });
-  }
+  this.instructions = this.instructionsInSearch = this.instructionService.sortByDate(instructions, -1);
+});
+}
 
   sortByTitle() {
     this.clickSortByName = true;

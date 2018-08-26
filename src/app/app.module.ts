@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import {AdminGuard, ReaderGuard, WriterGuard} from './auth/guards';
 import { JwtInterceptor } from './auth/helpers';
+import { CloudinaryModule } from '@cloudinary/angular-5.x';
+import * as  Cloudinary from 'cloudinary-core';
 import {
   InstructionService,
   UserService,
@@ -70,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         MarkdownModule.forRoot({ loader: HttpClient }),
         AceEditorModule,
         FileUploadModule,
+      CloudinaryModule.forRoot(Cloudinary, { cloud_name: 'mycloudname'}),
         routing
     ],
     declarations: [
