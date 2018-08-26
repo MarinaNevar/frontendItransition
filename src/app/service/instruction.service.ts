@@ -5,6 +5,9 @@ import {CommentAddDto, LikeDto, RatingSetDto, InstructionInfoDto, CommentShowDto
 
 @Injectable()
 export class InstructionService {
+  instruction: InstructionInfoDto = new InstructionInfoDto();
+
+
   constructor(private http: HttpClient) {}
 
   addInstruction(instruction: InstructionInfoDto) {

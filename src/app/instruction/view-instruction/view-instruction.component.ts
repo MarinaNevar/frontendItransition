@@ -45,11 +45,14 @@ export class ViewInstructionComponent implements OnInit {
       comment: ['', Validators.required]
     });
 
-    this.step.name = 'STEPNAME';
-    this.step.stepNumber = 1;
-    this.step.text = 'sdddddddsddsddsddsdssdsdsdds';
+    this.new = false;
+    this.id = 1234;
 
+    this.instruction = new InstructionInfoDto();
 
+    this.instruction.id = 1234;
+    this.instruction.id_user = 1234;
+    this.instruction.userImage = 'sjdfvnl';
     this.instruction.authorName = 'MARINANEVAR';
     this.instruction.categories = [
       { "id": 0, "name": "Available" },
@@ -60,15 +63,20 @@ export class ViewInstructionComponent implements OnInit {
     this.instruction.name = 'BIG INSTRUCTION MY';
     this.instruction.value_rating = 3,6;
     this.instruction.publishDate = '12.12.2018';
+
+    this.addSteps('STEPNAME', 1, 'sdddddddsddsddsddsdssdsdsdds');
+    this.addSteps('STEPNAME111111111111', 2, 'QQQQQQQQQQQQQQQQQQQQQQQQ');
+
+    console.log(this.instruction.steps.length);
+
+  }
+
+  addSteps(name:string, stepN: number, text: string) {
+    this.step = new Step();
+    this.step.name = name;
+    this.step.stepNumber = stepN;
+    this.step.text = text;
     this.instruction.steps.push(this.step);
-
-    this.step.name = 'STEPNAME111111111111';
-    this.step.stepNumber = 2;
-    this.step.text = 'QQQQQQQQQQQQQQQQQQQQQQQQ';
-
-    this.instruction.steps.push(this.step);
-
-
   }
 
   deleteInstruction(id: number) {
@@ -127,25 +135,17 @@ export class ViewInstructionComponent implements OnInit {
     return !this.authenticationService.isLogin();
   }
 
-  leftrightStep(str: string) {
-    switch (str) {
-      case 'right': {
-        this.numberStep++;
-        break;
-      }
-      case 'left': {
-        this.numberStep--;
-        break;
-      }
-    }
+  leftrightStep(num: number) {
+    this.numberStep += num;
   }
 
   correctLeftStep(): boolean {
-    return this.numberStep - 1 ? true : false;
+
+    return this.numberStep - 1 < 0 ? true : false;
   }
 
   correctRightStep(): boolean {
-    return this.numberStep + 1 ? true : false;
+    return this.numberStep + 1 > this.instruction.steps.length - 1 ? true : false;
   }
 
 }
