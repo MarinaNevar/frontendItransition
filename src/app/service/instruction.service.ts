@@ -11,7 +11,7 @@ export class InstructionService {
   constructor(private http: HttpClient) {}
 
   addInstruction(instruction: InstructionInfoDto) {
-    return this.http.post(`${environment.serverUrl}intsruction/addInstr`, instruction);
+    return this.http.post(`${environment.serverUrl}instructions/addInstr`, instruction);
   }
 
   getInstructions() {
@@ -23,31 +23,31 @@ export class InstructionService {
   }
 
   editInstruction(instruction: InstructionInfoDto) {
-    return this.http.post(`${environment.serverUrl}instruction/edit`, instruction);
+    return this.http.post(`${environment.serverUrl}instructions/edit`, instruction);
   }
 
   getInstructionById(id: number) {
-    return this.http.get<InstructionInfoDto>(`${environment.serverUrl}intsruction/` + id);
+    return this.http.get<InstructionInfoDto>(`${environment.serverUrl}instructions/` + id);
   }
 
   getInstructionsByUsername(username: string) {
-    return this.http.get<InstructionInfoDto[]>(`${environment.serverUrl}intsructions/allInstructions/` + username);
+    return this.http.get<InstructionInfoDto[]>(`${environment.serverUrl}instructions/allInstructions/` + username);
   }
 
   addImageToInstruction(image: FormData) {
-    return this.http.post<string>(`${environment.serverUrl}intsruction/addImageToInstruction`, image);//, {responseType: 'text'}
+    return this.http.post<string>(`${environment.serverUrl}instructions/addImageToInstruction`, image);//, {responseType: 'text'}
   }
 
   deleteInstruction(id: number) {
-    return this.http.delete(`${environment.serverUrl}intsruction/deleteInstruction/` + id);
+    return this.http.delete(`${environment.serverUrl}instructions/deleteInstruction/` + id);
   }
 
   addComment(commentAddDto: CommentAddDto) {
-    return this.http.post(`${environment.serverUrl}intsruction/addComment`, commentAddDto);
+    return this.http.post(`${environment.serverUrl}instructions/addComment`, commentAddDto);
   }
 
   showComments(idInstruction: number) {
-    return this.http.get<CommentShowDto[]>(`${environment.serverUrl}intsruction/comments/` + idInstruction);
+    return this.http.get<CommentShowDto[]>(`${environment.serverUrl}instructions/comments/` + idInstruction);
   }
 
   sortByName(instructions: InstructionInfoDto[], sortType: number): InstructionInfoDto[] {
@@ -74,7 +74,7 @@ export class InstructionService {
   }
 
   addLike(likeDto: LikeDto) {
-    return this.http.post(`${environment.serverUrl}intsruction/addLike`, likeDto);
+    return this.http.post(`${environment.serverUrl}instructions/addLike`, likeDto);
   }
 
   sortComments(commentsShowDto: CommentShowDto[]) {
@@ -84,10 +84,10 @@ export class InstructionService {
   }
 
   setRatingPost(ratingSetDto: RatingSetDto) {
-    return this.http.post<number>(`${environment.serverUrl}intsructions/setPostRating`, ratingSetDto);
+    return this.http.post<number>(`${environment.serverUrl}instructions/setRating`, ratingSetDto);
   }
 
   getInstructionRating(idInstruction: number) {
-    return this.http.get<number>(`${environment.serverUrl}intsruction/getInstructionRating/` + idInstruction);
+    return this.http.get<number>(`${environment.serverUrl}instructions/getRating/` + idInstruction);
   }
 }

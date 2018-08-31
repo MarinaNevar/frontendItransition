@@ -48,6 +48,7 @@ export class ProfileNewsComponent implements OnInit {
       () => {
         this.loadAllInstructions();
       });
+    window.location.reload();
   }
 
   private loadAllInstructions() {

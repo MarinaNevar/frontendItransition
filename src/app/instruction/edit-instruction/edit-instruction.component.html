@@ -19,7 +19,7 @@
         {{"Select category" | translate}}
       </button>
       <div class="dropdown-menu dropdown-primary">
-        <a class="dropdown-item col-md-11 m-left" *ngFor="let category of categories" (click)="disableHideDropdown($event)" (click)="category.isActive = !category.isActive">
+        <a [(ngModel)]="instruction.categories" class="dropdown-item col-md-11 m-left" *ngFor="let category of categories" (click)="disableHideDropdown($event)" (click)="category.isActive = !category.isActive">
           <input class="form-check-input mr-1 drop-checkbox position-static" [checked]="category.isActive" (onClick)="category.isActive = !category.isActive" type="checkbox">
           {{category.name}}
         </a>
@@ -32,8 +32,15 @@
         <label class="active" for="nameSteps" translate>Name step</label>
       </div>
       <div class="md-form">
-        <input class="form-control" id="textStep" required formControlName="stepText" type="text">
         <label class="active" for="textStep" translate>Text step</label>
+        <br>
+        <div ace-editor ng2FileDrop id="textStep" required formControlName="stepText" (onFileDrop)="imageUpload($event)"
+             [(text)]="markDownText"
+             [theme]="'eclipse'"
+             (fileOver)="fileOverAnother($event)"
+             [uploader]="uploader"
+             style="min-height: 300px; width:100%; overflow: auto;" name="markdownEditor">
+        </div>
       </div>
       <button mdbBtn color="info" class="mb-2 waves-light" mdbWavesEffect (click)="addStep()">
         Сохранить шаг

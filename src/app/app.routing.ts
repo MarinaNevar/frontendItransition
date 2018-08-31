@@ -23,9 +23,9 @@ const appRoutes: Routes = [
     { path: 'users', component: UsersListComponent, canActivate: [AdminGuard]},
     { path: 'profile/:username', component: ProfileComponent },
     { path: 'addInstruction', component: EditInstructionComponent, canActivate: [WriterGuard]},
-    { path: 'editInstruction/:id', component: EditInstructionComponent, canActivate: [WriterGuard]},
+    { path: 'editInstruction/:id', component: EditInstructionComponent}, // canActivate: [WriterGuard]},
     { path: 'instruction/:id', component: ViewInstructionComponent},
-    { path: 'exception404', component: Exception404Component},
+   // { path: 'exception404', component: Exception404Component},
       // children: [
       //   {
       //     path: '',
@@ -36,7 +36,7 @@ const appRoutes: Routes = [
       //     component: ProfileEditComponent
       //   }]},
     // otherwise redirect to home
-    { path: '**', redirectTo: 'exception404' }
+   // { path: '**', redirectTo: 'exception404' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

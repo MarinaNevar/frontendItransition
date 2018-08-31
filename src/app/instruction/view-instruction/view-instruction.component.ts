@@ -32,6 +32,7 @@ export class ViewInstructionComponent implements OnInit {
             this.new = false;
             this.instructionService.getInstructionById(this.id).pipe(first()).subscribe((data: InstructionInfoDto) => {
               this.id = data.id;
+              this.instruction = data;
             },
               () => {
               this.router.navigate(['/exception404']);

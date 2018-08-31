@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
-import {ErrorService, InfoService, InstructionService} from '../../service';
+import {AuthenticationService, ErrorService, InfoService, InstructionService} from '../../service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {first} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
@@ -16,6 +16,7 @@ import {Category, Step} from '../../model/';
 })
 export class EditInstructionComponent implements OnInit, OnDestroy {
 
+  markDownText: string = '';
   newStep: Step;
   numberSteps = 1;
   instruction = new InstructionInfoDto();
@@ -40,7 +41,8 @@ export class EditInstructionComponent implements OnInit, OnDestroy {
               private sectionService: SectionService,
               private router: Router,
               private infoService: InfoService,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private authenticationService: AuthenticationService) {
     this.stepForm = this.formBuilder.group({
       stepName: [''],
       stepText: ['']
@@ -103,13 +105,14 @@ export class EditInstructionComponent implements OnInit, OnDestroy {
    addStep() {
      this.newStep = new Step();
      this.newStep.name = this.stepForm.controls.stepName.value;
-     this.newStep.text = this.stepForm.controls.stepText.value;
+     this.newStep.text = this.markDownText;
      this.newStep.stepNumber = this.numberSteps;
-     if ((this.newStep.name.length !== 0) && (this.newStep.text.length !== 0)) {
+     if ((this.newStep.name.length !== 0) && (this.markDownText.length !== 0)) {
        this.instruction.steps.push(this.newStep);
        this.numberSteps++;
      }
      this.stepForm.reset();
+     this.markDownText = '';
    }
 
    removeStep(step: Step) {
@@ -141,6 +144,7 @@ export class EditInstructionComponent implements OnInit, OnDestroy {
       this.showError();
       return;
     }
+    this.instruction.id_user = this.authenticationService.getCurrentUserId();
     this.instruction.value_rating = 0;
     this.setInstructionCategories();
     this.instructionService.addInstruction(this.instruction).pipe(first())

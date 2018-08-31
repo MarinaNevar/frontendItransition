@@ -21,7 +21,7 @@
           <div class="row">
             <div class="col-lg-5 col-xl-5 pb-3">
               <div class="view overlay rounded z-depth-2 waves-light" mdbWavesEffect>
-                <img src={{instruction.userImage}} alt="Sample image for first version of blog listing"
+                <img src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg" alt="Sample image for first version of blog listing"
                      class="img-fluid img-size w-100 h-100">
                 <a>
                   <div class="mask rgba-white-slight"></div>
@@ -43,7 +43,7 @@
                   <strong>{{instruction.authorName}}</strong>
                 </a>, {{instruction.publishDate | date}}</p>
               <app-rating [username]="instruction.authorName" [read]="true" [idInstruction]="instruction.id"></app-rating>
-              <a class="btn btn-md mb-3 waves-light" routerLink="/instruction/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
+              <a class="btn btn-md mb-3 waves-light" routerLink="instruction/{{instruction.id}}" mdbWavesEffect translate>Read more</a>
             </div>
           </div>
           <hr class="mb-5 mt-5 pb-3">
