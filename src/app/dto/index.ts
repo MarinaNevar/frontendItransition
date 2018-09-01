@@ -8,3 +8,4 @@ export * from './LoginResponseDto';
 export * from './LoginRequestDto';
 export * from './ErrorDto';
 export * from './UserAddDto';
+export * from './InstructionPresent';

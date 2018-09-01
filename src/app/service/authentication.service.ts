@@ -15,7 +15,7 @@ export class AuthenticationService {
                 private infoService: InfoService) { }
 
     login(loginRequestDto: LoginRequestDto) {
-        return this.http.post<LoginResponseDto>(`${environment.serverUrl}auth/login`, loginRequestDto)
+        return this.http.post<LoginResponseDto>(`${environment.serverUrl}users/login`, loginRequestDto)
             .pipe(map((res: LoginResponseDto) => {
                 this.infoService.alertInformation(res.errorDto.error, res.errorDto.message);
                 if (res && res.token) {

@@ -8,32 +8,32 @@ import {ErrorDto, UserEditDto, UserAddDto} from '../dto';
 export class UserService   {
   constructor(private http: HttpClient) { }
 
+  addUser(userAddDto: UserAddDto) {
+    return this.http.post<ErrorDto>(`${environment.serverUrl}users`, userAddDto);
+  }
+
   getAll() {
-    return this.http.get<User[]>(`${environment.serverUrl}users/getAll`);
+    return this.http.get<User[]>(`${environment.serverUrl}users`);
   }
 
   getByUsername(username: string) {
-    return this.http.get<UserEditDto>(`${environment.serverUrl}users/` + username);
-  }
-
-  addUser(userAddDto: UserAddDto) {
-    return this.http.post<ErrorDto>(`${environment.serverUrl}auth/registration`, userAddDto);
+    return this.http.get<UserEditDto>(`${environment.serverUrl}users/${username}`);
   }
 
   update(user: UserEditDto) {
-    return this.http.post(`${environment.serverUrl}users/edit`, user);
+    return this.http.put(`${environment.serverUrl}users`, user);
   }
 
   uploadImage(image: FormData, id: number) {
-    return this.http.post(`${environment.serverUrl}users/editImage/` + id, image);
+    return this.http.post(`${environment.serverUrl}users/${id}/images`, image);
   }
 
   delete(id: number) {
-    return this.http.delete(`${environment.serverUrl}users/` + id);
+    return this.http.delete(`${environment.serverUrl}users/${id}`);
   }
 
   block(id: number, blocked: boolean) {
-    return this.http.post(`${environment.serverUrl}users/block/` + id, { blocked });
+    return this.http.post(`${environment.serverUrl}users/${id}/block`, { blocked });
   }
 
   getThemes() {
@@ -69,10 +69,10 @@ export class UserService   {
 
   getImage(username: string) {
     // @ts-ignore
-    return this.http.get<string>(`${environment.serverUrl}users/getImage/` + username, {responseType: 'text'});
+    return this.http.get<string>(`${environment.serverUrl}users/${username}/images`, {responseType: 'text'});
   }
 
   uniqueUsername(username: string) {
-    return this.http.get<boolean>(`${environment.serverUrl}users/unique/` + username);
+    return this.http.get<boolean>(`${environment.serverUrl}users/${username}/unique`);
   }
 }
